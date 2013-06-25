@@ -1,173 +1,594 @@
-<?php require_once "/var/www/Game/trunk/libraries/constant.php"; ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<?php require_once "/var/www/SnakeandLadder/trunk/libraries/constant.php"; ?>
 <script src="<?php echo SITE_URL;?>/js/jquery.tools.min.js"></script>
-<style>
-#container
-{
-	background-image:url(<?php echo SITE_URL .'/images/board.gif' ?>);
-	background-repeat:no-repeat;
-	background-size:668px 475px;
-	background-color: transparent;
-  	box-shadow: 40px 40px 100px 40px #000;
-	margin-top:-200px;
-	margin-left:346px;
-	height:475px;
-	width:670px;
+<script src="<?php echo SITE_URL;?>/js/jquery-1.9.1.js"></script>
+	<script src="<?php echo SITE_URL;?>/js/jquery.ui.core.js"></script>
+	<script src="<?php echo SITE_URL;?>/js/jquery.ui.widget.js"></script>
+	<script src="<?php echo SITE_URL;?>/js/jquery.ui.mouse.js"></script>
+	<script src="<?php echo SITE_URL;?>/js/jquery.ui.draggable.js"></script>
+	<script src="<?php echo SITE_URL;?>/js/jquery.ui.droppable.js"></script>
+	<script src="<?php echo SITE_URL;?>/js/functions.js"></script>
+<html>
+<head>
+<title>Snake and ladder</title>
+<style type='text/css'>
+div {
+	border: 1px solid red;
 }
 
-h2
-{
+table td {
+	height: 10%;
+	width: 10%;
+}
+
+#roll {
+	clear: left;
+	float: left;
+	width: 520px;
+	height: 24pt;
+	margin: 40px 0 0 0;
+	font-size: 18pt;
+	font-weight: bold;
+	border-style: outset;
+	background: white;
+}
+
+#snakeandladder {
+	background-image: url(<?php echo SITE_URL;?>/images/snakeandladder.jpg);
+	background-position: center;
+	background-size: 102% 102%;
+	background-repeat: no-repeat;
+}
+
+#container {
+	background-image: url(<?php echo SITE_URL;?>/images/rolldicelogo.gif);
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+}
+
+.bubble {
+	background-color: #FFAB00;
+	border: 2px solid #333;
+	border-radius: 5px;
+	color: #333;
+	display: inline-block;
+	font: 16px/24px sans-serif;
+	padding: 12px 24px;
+	position: relative;
+}
+
+.bubble:after,.bubble:before {
+	border-left: 20px solid transparent;
+	border-right: 20px solid transparent;
+	border-top: 20px solid #FFAB00;
+	bottom: -20px;
+	content: '';
+	left: 50%;
+	margin-left: -20px;
+	position: absolute;
+}
+
+/* Styling for second triangle (border) */
+.bubble:before {
+	border-left: 23px solid transparent;
+	border-right: 23px solid transparent;
+	border-top: 23px solid;
+	border-top-color: inherit;
+	/* Can't be included in the shorthand to work */
+	bottom: -23px;
+	margin-left: -23px;
+}
 	
-	color: #fff;
-        text-shadow: 0px -1px 4px white, 0px -2px 10px yellow, 0px -10px 20px #ff8000, 0px -18px 40px red;
-        font: 24px 'BlackJackRegular';
-
-
-}
 </style>
-<?php
-echo '<div id="container">';
-	echo '<div style="height:158px;">';
-		echo '<div style="height:157px;width:221px;float:left;">'.'</div>';
-		echo '<div style="height:157px;width:221px;margin-left:223px;">';
-			echo '<div style="height:45px;width:216px;margin:2px;" ';
-			if(isset($_SESSION['user1']))
+
+
+
+</head>
+<script>
+
+
+var name = new Array() ;
+var userpositions = new Array() ;
+var useravatar = new Array() ;
+var temp = 0;
+var pos = 0;
+var Timer1;
+var user;
+var turn;
+var kick;
+var avatar;
+var opponent;
+var message1 = "Ok Let's Start the Game!!!";
+var message2 = "Waiting for Compatible Opponents to turn Up!!!";
+var message3 = "Please Roll The dice Again!!!";
+var message4 = "Oh Its a Snake!!!";
+var message5 = "Hurray!!! Its a Ladder!!!";
+var message6 = "Sorry!!! It total is Over hundred!!!";
+var message7 = "Hurray!!! You Have Won!!!";
+var message8 = "Sorry!!! You Have Lost!!!";
+$(document).ready(function()
+{
+	<?php 
+		if(!empty($_REQUEST['name']) && !empty($_REQUEST['turn']) && !empty($_REQUEST['kickback'])) 
+		{
+	?>
+			$("#die1").hide();
+			$("#die2").hide();
+			$("#dicerollbutton").hide();
+			user = <?php echo "'".$_REQUEST['name']."'";?>;
+			turn = <?php echo "'" .$_REQUEST['turn']."'";?>;
+			kick = <?php echo "'".$_REQUEST['kickback']."'";?>;
+			avatar = <?php echo "'" .$_REQUEST['avatar']."'" ;?>;
+			opponent = <?php echo $_REQUEST['opponent'] ; ?>;
+			$.ajax
+			({
+				type: "POST",
+        			url: '../controller/controller.php?method=insertUser&user='+user+"&turn="+turn+"&kick="+kick+"&avatar="+avatar,
+     				success: function(data)
+     				{
+     					if($.trim(data) == "1")
+					{
+						$(".player").attr("id",user);
+						$("#"+user).html("<img src='<?php echo SITE_URL;?>/images/"+ avatar + "' height='50' width='50' class='draggable2'/>");
+						Timer1 = setInterval(fetchUser, 5000);
+					}
+				}
+				
+			});		
+	<?php
+		}
+		else
+		{
+			header('Location: bendrules.php');
+		}
+	?>
+});
+
+
+
+function fetchUser()
+{
+	$.ajax
+			({
+				type: "POST",
+        			url: '../controller/controller.php?method=fetchUser&user='+user+"&turn="+turn+"&kick="+kick+"&avatar="+avatar+"&opponent="+opponent,
+     				success: function(data)
+     				{
+					if($.trim(data) != "1")
+					{
+						var resp=jQuery.parseJSON($.trim(data));
+						$.each(resp, function(key, val) 
+						{
+							temp = 1;
+							if(key % 2 == 0)
+							{
+								name[key] = val;
+							}
+							else
+							{
+								$("#"+user).append("<img src='<?php echo SITE_URL;?>/images/"+ val + "' height='50' width='50' />");
+							}
+							
+						});
+					}
+					else
+					{
+						$("#45").fadeIn();
+						$("#45").html("<span class='bubble'>"+ message2 +"</span>");
+						$("#45").fadeOut(4000);
+					}
+     				},
+				complete:function()
+				{	
+					if(temp == 1)
+     					{
+						$("#45").html("<span class='bubble'>"+ message1 +"</span>");
+						$("#45").fadeOut(8000);
+						clearInterval(Timer1);
+						name[opponent] = user;
+						$.ajax
+						({
+							type: "POST",
+        						url: '../controller/controller.php?method=updateUser&users='+name,
+							success:function(data)
+							{
+								if($.trim(data) == "1")
+								{
+									setChance();
+									Timer2 = setInterval(getChance(), 5000);
+								}
+							}
+     						});
+					}
+				}
+				
+			});
+}
+
+function getChance()
+{
+	$.ajax
+	({
+		type: "POST",
+		url: '../controller/controller.php?method=getChance',
+		success: function(data)
+		{
+			if($.trim(data) != "-1")
 			{
-				echo 'id="';
-				echo $_SESSION['user1']; 
-				echo '"';
+				
+				var resp=jQuery.parseJSON($.trim(data));
+				if(resp == user)
+				{
+					$("#die1").show();
+					$("#die2").show();
+					$("#dicerollbutton").show();
+				}
+				else
+				{
+					$("#45").fadeIn();
+					$("#45").html("<span class='bubble'> It is "+ resp +"'s Turn!!!</span>");
+					$("#45").fadeOut(4000);
+				}
+				Timer3 = setInterval(getPosition(), 5000);
 			}
-			echo '></div>';
-			echo '<div style="height:45px;width:150px;margin:2px;float:left;" >';
-			if(isset($_SESSION['user1']))
+		}
+		
+	});
+}
+
+function getPosition()
+{
+	$.ajax
+	({
+		type: "POST",
+		url: '../controller/controller.php?method=getPosition&user='+user,
+		success: function(data)
+		{
+			if($.trim(data) != "-1")
 			{
-				echo "<center>";
-				echo '<h2>'.ucfirst($_SESSION['user1']).'</h2>';
-				echo "</center>";
-			}
-			echo '</div>';
-			
-			echo '<div style="height:45px;width:60px;margin-top:2px;margin-left:153px;margin-bottom:2px;"';
-			if($_SESSION['user1'])
-			{
-				echo 'id="u1" class="';
-				echo $_SESSION['user1'];
-				echo '"';
-			}			
-			echo '> </div>';
-			echo '<div style="height:45px;width:100px;margin:2px;float:left;" id="u10">';
-				echo '<img src="'.SITE_URL.'/images/greenarrowup.gif" height=50 width=50 style="margin-left:30px;"/>';
-			echo '</div>';
-			echo '<div style="height:45px;width:110px;margin:2px;margin-left:105px;" id="popmessage">'.'</div>';
-		echo '</div>';
-		echo '<div style="height:157px;width:221px;float:right;margin-top:-160px;">'.'</div>';
-	echo '</div>';
-	echo '<div style="height:158px;">';
-		echo '<div style="height:157px;width:221px;float:left;">';
-			echo '<div style="height:45px;width:216px;margin:2px;"';
-			if(isset($_SESSION['user2']))
-			{
-				echo 'id="';
-				echo $_SESSION['user2']; 
-				echo '"';
-			}
-			echo '></div>';
-			echo '<div style="height:45px;width:150px;margin:2px;float:left;" >';
-			if(isset($_SESSION['user2']))
-			{
-				echo '<h2>'.ucfirst($_SESSION['user2']).'</h2>';
-			}
-			echo '</div>';
-			echo '<div style="height:45px;width:60px;margin-top:2px;margin-left:153px;margin-bottom:2px;"';
-			if($_SESSION['user2'])
-			{
-				echo 'id="u2" class="';
-				echo $_SESSION['user2'];
-				echo '"';
-			}			
-			echo '> </div>';
-			echo '<div style="height:45px;width:100px;margin:2px;float:left;" id="u21">';
-				echo '<img src="'.SITE_URL.'/images/greenarrowup.gif" height=50 width=50 style="margin-left:30px;"/>';
-			echo '</div>';
-			echo '<div style="height:45px;width:110px;margin:2px;margin-left:105px;">'.'</div>';	
-		echo '</div>';
-		echo '<div style="height:157px;width:221px;margin-left:223px;" id="slips">';
-			echo '<table style="height:100px;width:100px;margin-left:55px;margin-top:20px;">';
-				echo "<tr>";
-					echo "<td class ='rotateimage0 centerText'><img src='".SITE_URL."/images/rolledpaper1.png' height=50 width=50/> </td>";
-					echo "<td class ='rotateimage1 centerText'><img src='".SITE_URL."/images/rolledpaper2.png' height=50 width=50/> </td>";
-				echo "</tr>";
-				echo "<tr>";
-					echo "<td class ='rotateimage2 centerText'><img src='".SITE_URL."/images/rolledpaper3.png' height=50 width=50/> </td>";
-					echo "<td class ='rotateimage3 centerText'><img src='".SITE_URL."/images/rolledpaper4.png' height=50 width=50/> </td>";
-				echo "</tr>";
-				echo "<tr>";
-					echo "<td   colspan=2></td>";
+				var usernames = new Array();
+				var resp=jQuery.parseJSON($.trim(data));
+				$.each(resp, function(key, val) 
+				{
 					
-				echo "</tr>";
-			echo "</table>";
-		echo '</div>';
-		echo '<div style="height:157px;width:221px;float:right;margin-top:-160px;">';
-			echo '<div style="height:45px;width:216px;margin:2px;"';
-			if(isset($_SESSION['user4']))
-			{
-				echo 'id="';
-				echo $_SESSION['user4']; 
-				echo '"';
+					if(key % 2 == 0)
+					{
+						usernames[key] = val; 
+					}
+					if(key % 2 == 1)
+					{
+						useravatar[key] = val; 
+					}
+					else
+					{
+						("$"+userpositions[key]).html(" ");
+						$("#"+val).html("<img src='<?php echo SITE_URL;?>/images/"+ useravatar[key] + "' height='50' width='50' id='"+usernames[key]+"' />");
+						userpositions[key] = val;
+					}
+				});
+				
 			}
-			echo '></div>';
-			echo '<div style="height:45px;width:60px;margin-top:2px;margin-bottom:2px;float:left;"';
-			if($_SESSION['user4'])
-			{
-				echo 'id="u3" class="';
-				echo $_SESSION['user4'];
-				echo '"';
-			}			
-			echo '> </div>';
-			echo '<div style="height:45px;width:150px;margin:2px;margin-left:62px;" >';
-			if(isset($_SESSION['user4']))
-			{
-				echo '<h2>'.ucfirst($_SESSION['user4']).'</h2>';
+		}
+		
+	});
+}
+function setChance()
+{
+	$.ajax
+	({
+		type: "POST",
+		url: '../controller/controller.php?method=setChance&users='+name,				
+	});
+}
+</script>
+<body>
+<div id='container' style="width: 20%; height: 80%; float: left;">
+	<div id="Diceroll" style='margin-top: 85%;'>
+		<div id='die1' style="width: 39%; height: 18%; margin-left: 10%; float: left;"></div>
+		<div id='die2' style="width: 39%; height: 18%; margin-left: 51%;"></div>
+		<div style='clear: left; width: 100%; margin-top: 20%;' id = "dicerollbutton">
+			<a href="#" onClick='animateRoll()' style="margin-left:9%;"><img src="<?php echo SITE_URL ?>/images/rolldice.jpg" height='60' width='220'/></a>
+		</div>
+		<div style="margin-top: 20%; height: 10%" class="player"></div>
+	</div>
+</div>
+<div id='snakeandladder' style="width: 70%; height: 100%; margin-left: 21%;">
+	<table style="width: 100%; height: 100%; text-align: center; white-space: normal;" cellspacing="0" cellpadding="0">
+<?php
+
+$k = 10;
+$m = 9;
+for($j = 0; $j < 10; $j ++) {
+	
+	if ($j % 2 == 0) {
+		for($i = 10; $i > 0; $i --) {
+			if ($i % 10 == 0) {
+				?>			
+					<tr>
+<?php
 			}
-			echo '</div>';
-			echo '<div style="height:45px;width:110px;float:left;margin-left:-60px;">'.'</div>';
-			echo '<div style="height:45px;width:100px;margin-left:115px;" id="u32">';
-				echo '<img src="'.SITE_URL.'/images/greenarrowup.gif" height=50 width=50 />';
-			echo '</div>';
-			
-		echo '</div>';
-	echo '</div>';
-	echo '<div style="height:158px;">';
-		echo '<div style="height:157px;width:221px;float:left;">'.'</div>';
-		echo '<div style="height:157px;width:221px;margin-left:223px;">';
-			echo '<div style="height:45px;width:216px;margin:2px;"';
-			if(isset($_SESSION['user3']))
-			{
-				echo 'id="';
-				echo $_SESSION['user3']; 
-				echo '"';
+			?>
+				<td id="<?php echo ($i + ($k * $m)); ?>"></td>
+<?php
+			if ($i % 10 == 1) {
+				?>
+					</tr>
+<?php
 			}
-			echo '></div>';
-			echo '<div style="height:45px;width:150px;margin:2px;float:left;" >';
-			if(isset($_SESSION['user3']))
-			{
-				echo '<h2>'.ucfirst($_SESSION['user3']).'</h2>';
+		}
+	} else {
+		for($i = 0; $i < 10; $i ++) {
+			if ($i % 10 == 0) {
+				?>
+					<tr>
+<?php
 			}
-			echo '</div>';
-			echo '<div style="height:45px;width:60px;margin-top:2px;margin-left:153px;margin-bottom:2px;"';
-			if($_SESSION['user3'])
-			{
-				echo 'id="u3" class="';
-				echo $_SESSION['user3'];
-				echo '"';
-			}			
-			echo '> </div>';
-			echo '<div style="height:45px;width:100px;margin:2px;float:left;" id="u43">';
-				echo '<img src="'.SITE_URL.'/images/greenarrowup.gif" height=50 width=50 style="margin-left:30px;"/>';
-			echo '</div>';
-			echo '<div style="height:45px;width:110px;margin:2px;margin-left:105px;">'.'</div>';	
-		echo '</div>';
-		echo '<div style="height:157px;width:221px;float:right;margin-top:-160px;">'.'</div>';
-	echo '</div>';
-echo '</div>';
-echo "<h1 style = 'display:none;'>" .count($b). "</h1>";
+			?>
+					<td id="<?php echo ($i + ($k * $m) +1); ?>"></td>
+<?php
+			if ($i % 10 == 9) {
+				?>
+					</tr>
+<?php
+			}
+		}
+	}
+	$m --;
+}
+
 ?>
+
+
+</table>
+	</div>
+</body>
+</html>
+<script type='text/javascript'> 
+var pos = 0;
+var snakeface = new Array(17,54,62,64,87,93,95,98 );
+var snaketail = new Array(7,34,19,60,24,73,75,79 );
+var laddertail = new Array(1,4,9,21,28,51,71,80 );
+var ladderface = new Array(38,14,31,42,84,67,91,100 );
+
+     function animateRoll(times)
+     {
+         times = times || 1;
+        
+         var roll = generateRoll();
+         drawRoll(roll[0], roll[1]);
+         
+         if (times > 10)
+         {
+               	var sum = checkRoll(roll[0], roll[1]);
+        	$("#"+pos).html('');
+		$("#"+pos).removeClass("droppable ui-droppable ui-state-highlight").addClass("draggable");
+		if(turn == '1')
+		{
+			if(sum == 6)
+			{
+				pos += sum;
+				$("#45").html("<span class='bubble'>" + message3 + " </span>");
+			}
+			else
+			{
+				pos += sum;
+				if(pos <= 100)
+				{
+					for(var i = 0 ; i < snakeface.length ; i ++)
+					{
+						if(pos == snakeface[i])
+						{
+							$("#45").fadeIn();
+							$("#45").html("<span class='bubble'>" + message4 + " </span>");
+							$("#45").fadeOut(8000);
+							pos = snaketail[i];
+							$("#84").fadeIn();
+							$("#84").html("<span class='bubble'> You can come down to " + pos + " position</span>");
+							$("#84").fadeOut(8000);
+							$temp = 1;
+						}
+					}
+					for(var i = 0 ; i < laddertail.length ; i ++)
+					{
+						if(pos == laddertail[i])
+						{
+							$("#45").fadeIn();
+							$("#45").html("<span class='bubble'>" + message5 + " </span>");
+							$("#45").fadeOut(8000);
+							pos = ladderface[i];
+							$("#96").fadeIn();
+							$("#96").html("<span class='bubble'> You can Move up to" + pos + "position</span>");
+							$("#96").fadeOut(8000);
+							$temp = 1;
+						}
+					}
+					if($temp == 0 )
+					{
+						$("#45").fadeIn();
+						$("#45").html("<span class='bubble'>Please Move " + sum + " positions Forward </span>");
+						$("#45").fadeOut(8000);
+					}
+					if(pos == 100)
+					{
+						$("#45").fadeIn();
+						$("#45").html("<span class='bubble'>" + message7 + "</span>");
+						$("#45").fadeOut(8000);
+					}
+					$("#"+pos).attr("class" , "droppable");
+					$( ".draggable" ).draggable({ revert: "valid" });
+					$( ".draggable2" ).draggable({ revert: "invalid" });
+					$( ".droppable" ).droppable
+					({
+						activeClass: "ui-state-hover",
+						hoverClass: "ui-state-active",
+						drop: function( event, ui ) 
+						{
+							var position = this.id;
+							$.ajax
+							({
+								type: "POST",
+								url: '../controller/controller.php?method=updateUserPosition&users='+name+"&user="+user+"&pos="+position,				
+								success:function(data)
+								{
+									if($.trim(data) == "1")
+									{
+										$("#die1").hide();
+										$("#die2").hide();
+										$("#dicerollbutton").hide();
+									}
+								}				
+							});
+			
+						}
+					});
+					$("#"+pos).html("");
+				       return;
+				}
+				else
+				{
+					$("#45").fadeIn();
+					$("#45").html("<span class='bubble'>" + message6 + " </span>");
+					$("#45").fadeOut(8000);
+					pos -= sum;
+					$.ajax
+					({
+						type: "POST",
+						url: '../controller/controller.php?method=updateUserPosition&users='+name+"&user="+user+"&pos="+pos,				
+						success:function(data)
+						{
+							if($.trim(data) == "1")
+							{
+								$("#die1").hide();
+								$("#die2").hide();
+								$("#dicerollbutton").hide();
+							}
+						}				
+					});
+				}
+			}
+		}
+		else
+		{
+			pos += sum;
+			if(pos <= 100)
+			{
+				for(var i = 0 ; i < snakeface.length ; i ++)
+				{
+					if(pos == snakeface[i])
+					{
+						$("#45").fadeIn();
+						$("#45").html("<span class='bubble'>" + message4 + " </span>");
+						$("#45").fadeOut(8000);
+						pos = snaketail[i];
+						$("#84").fadeIn();
+						$("#84").html("<span class='bubble'> You can come down to " + pos + " position</span>");
+						$("#84").fadeOut(8000);
+						$temp = 1;
+					}
+				}
+				for(var i = 0 ; i < laddertail.length ; i ++)
+				{
+					if(pos == laddertail[i])
+					{
+						$("#45").fadeIn();
+						$("#45").html("<span class='bubble'>" + message5 + " </span>");
+						$("#45").fadeOut(8000);
+						pos = ladderface[i];
+						$("#96").fadeIn();
+						$("#96").html("<span class='bubble'> You can Move up to" + pos + "position</span>");
+						$("#96").fadeOut(8000);
+						$temp = 1;
+					}
+				}
+				if($temp == 0 )
+				{
+					$("#45").fadeIn();
+					$("#45").html("<span class='bubble'>Please Move " + sum + " positions Forward </span>");
+					$("#45").fadeOut(8000);
+				}
+				if(pos == 100)
+				{
+					$("#45").fadeIn();
+					$("#45").html("<span class='bubble'>" + message7 + "</span>");
+					$("#45").fadeOut(8000);
+				}
+				$("#"+pos).attr("class" , "droppable");
+				$( ".draggable" ).draggable({ revert: "valid" });
+				$( ".draggable2" ).draggable({ revert: "invalid" });
+				$( ".droppable" ).droppable({
+					activeClass: "ui-state-hover",
+					hoverClass: "ui-state-active",
+					drop: function( event, ui ) {
+						var position = this.id;
+						$.ajax
+						({
+							type: "POST",
+							url: '../controller/controller.php?method=updateUserPosition&users='+name+"&user="+user+"&pos="+position,				
+							success:function(data)
+							{
+								if($.trim(data) == "1")
+								{
+									alert("I m IN");
+									$("#die1").hide();
+									$("#die2").hide();
+									$("#dicerollbutton").hide();
+								}
+							}				
+						});
+		
+					}
+				});
+
+
+
+			       $("#"+pos).html("");
+			       return;
+			}
+			else
+				{
+					$("#45").fadeIn();
+					$("#45").html("<span class='bubble'>" + message6 + " </span>");
+					$("#45").fadeOut(8000);
+					pos -= sum;
+					$.ajax
+					({
+						type: "POST",
+						url: '../controller/controller.php?method=updateUserPosition&users='+name+"&user="+user+"&pos="+pos,				
+						success:function(data)
+						{
+							if($.trim(data) == "1")
+							{
+								$("#die1").hide();
+								$("#die2").hide();
+								$("#dicerollbutton").hide();
+							}
+						}				
+					});
+				}
+		}
+		
+		
+          }
+         
+         setTimeout('animateRoll(' + (times + 1) + ')', 200);
+     }
+
+     function generateRoll()
+     {
+         return [ Math.floor(Math.random()*6) + 1, Math.floor(Math.random()*6) + 1 ];
+     }
+
+     function drawRoll(die1, die2)
+     {
+         document.getElementById('die1').innerHTML = '<img src="<?php echo SITE_URL;?>/images/Dice_' + die1 +'.png" />';
+         document.getElementById('die2').innerHTML = '<img src="<?php echo SITE_URL;?>/images/Dice_' + die2 +'.png" />';
+     }
+
+     function checkRoll(die1, die2)
+     {
+         var sum = die1 + die2;
+         return sum;
+     }  
+          
+      
+  </script>

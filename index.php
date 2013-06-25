@@ -1,47 +1,5 @@
 <?php require_once "/var/www/SnakeandLadder/trunk/libraries/constant.php"; ?>
 <script src="<?php echo SITE_URL;?>/js/jquery.tools.min.js"></script>
-<?php 
-$snakeface = array (
-		17,
-		54,
-		62,
-		64,
-		87,
-		93,
-		95,
-		98 
-);
-$snaketail = array (
-		7,
-		34,
-		19,
-		60,
-		24,
-		73,
-		75,
-		79 
-);
-$laddertail = array (
-		1,
-		4,
-		9,
-		21,
-		28,
-		51,
-		71,
-		80 
-);
-$ladderface = array (
-		38,
-		14,
-		31,
-		42,
-		84,
-		67,
-		91,
-		100 
-);
-?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
@@ -84,6 +42,11 @@ table td {
 
 <script type='text/javascript'> 
    var pos = 0;
+var snakeface = new Array(17,54,62,64,87,93,95,98 );
+var snaketail = new Array(7,34,19,60,24,73,75,79 );
+var laddertail = new Array(1,4,9,21,28,51,71,80 );
+var ladderface = new Array(38,14,31,42,84,67,91,100 );
+
      function animateRoll(times)
      {
          times = times || 1;
@@ -95,7 +58,24 @@ table td {
          {
                var sum = checkRoll(roll[0], roll[1]);
                $("#"+pos).html('');
+		
                pos += sum;
+		for(var i = 0 ; i < snakeface.length ; i ++)
+		{
+			if(pos == snakeface[i])
+			{
+				pos = snaketail[i];
+			}
+		}
+		for(var i = 0 ; i < laddertail.length ; i ++)
+		{
+			if(pos == laddertail[i])
+			{
+				pos = ladderface[i];
+			}
+		}
+		
+		
                $("#"+pos).html("<img src='<?php echo SITE_URL;?>/images/grl.png' height='30' width='30'/>");
                return;
           }

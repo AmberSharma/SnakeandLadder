@@ -71,15 +71,6 @@ class MyClass
 		$objInitiateUser = new Register ();
 		$b=$objInitiateUser->assignUserSpace () ;
 	}
-
-	public function insertMessage ()
-	{
-		require_once SITE_PATH.'/../model/gettersettermodel.php';
-		$objInitiateUser = new Register ();
-		$objInitiateUser->setMessage($_REQUEST['message']);
-		$b=$objInitiateUser->insertMessage () ;
-		print_r($b);
-	}
 	
 	public function fetchPlayingUser ()
 	{
@@ -103,15 +94,7 @@ class MyClass
 		
 	}
 	
-	public function insertslipRandom ()
-	{
-		require_once SITE_PATH.'/../model/gettersettermodel.php';
-		$objInitiateUser = new Register ();
-		$objInitiateUser->setRandom2($_REQUEST['r2']);
-		$objInitiateUser->slipRandom();
-		$objInitiateUser->turnRandom () ;
 	
-	}
 	
 	public function fetchturnRandom ()
 	{
@@ -120,41 +103,116 @@ class MyClass
 		$b = $objInitiateUser->fetchturnRandom () ;
 	
 	}
-	
-	public function fetchslipRandom ()
+
+	public function insertUser ()
 	{
 		require_once SITE_PATH.'/../model/gettersettermodel.php';
 		$objInitiateUser = new Register ();
-		$b = $objInitiateUser->fetchslipRandom () ;
-		$b =str_replace(',', '', $b);
+		$objInitiateUser->setUser($_REQUEST['user']);
+		$objInitiateUser->setTurn($_REQUEST['turn']);
+		$objInitiateUser->setKickback($_REQUEST['kick']);
+		$objInitiateUser->setAvatar($_REQUEST['avatar']);
+		$b = $objInitiateUser->insertUser () ;
+		if($b)
+		{
+			die("1");
+		}
+	
+	}
+
+	public function fetchUser ()
+	{
+		require_once SITE_PATH.'/../model/gettersettermodel.php';
+		$objInitiateUser = new Register ();
+		$objInitiateUser->setUser($_REQUEST['user']);
+		$objInitiateUser->setTurn($_REQUEST['turn']);
+		$objInitiateUser->setKickback($_REQUEST['kick']);
+		$objInitiateUser->setAvatar($_REQUEST['avatar']);
+		$b = $objInitiateUser->fetchUser () ;
+		if($b)
+		{
+			if(count($b) >= $_REQUEST['opponent'])
+			{
+				for($i = 0 ; $i < $_REQUEST['opponent'] ; $i ++ )
+				{
+					$arr[] = $b[$i]['name'];
+					$arr[] = $b[$i]['avatar'];
+				}
+				echo json_encode($arr);
+			}
+			else
+			{
+				die("1");
+			}
+		}
+		else
+		{
+			die("1");
+		}
+	
+	}
+	
+	public function updateUser ()
+	{
+		require_once SITE_PATH.'/../model/gettersettermodel.php';
+		$objInitiateUser = new Register ();
+		$abc = explode("," , $_REQUEST['users']);
+		$b = $objInitiateUser->updateUser ($abc) ;
 		die($b);
 		
 	
 	}
-
-	public function getMessage ()
+	public function updateUserPosition ()
 	{
 		require_once SITE_PATH.'/../model/gettersettermodel.php';
 		$objInitiateUser = new Register ();
-		$b=$objInitiateUser->getnewMessage () ;
-		if(!empty($b))
-		{
-			for($i = 0 ; $i < count($b) ;$i ++)
-			{
-				$arr[] = $b[$i]["user"];
-				$arr[] = $b[$i]["message"];
-			}
-		}
-		echo json_encode($arr);
+		$abc = explode("," , $_REQUEST['users']);
+		$b = $objInitiateUser->updateUserPosition ($abc ,  $_REQUEST['user'] , $_REQUEST['pos']) ;
+		die($b);
 	}
 	
-	public function gameSet ()
+	public function getChance ()
 	{
 		require_once SITE_PATH.'/../model/gettersettermodel.php';
 		$objInitiateUser = new Register ();
-		$b=$objInitiateUser->updateUser () ;
-		print_r($b);die;
-		
+		$b = $objInitiateUser->getChance () ;
+		if(!empty($b[0]['name']))
+		{
+			echo json_encode($b[0]['name']);
+		}
+		else
+		{
+			return "-1" ;
+		}
+	
+	}
+
+	public function getPosition ()
+	{
+		require_once SITE_PATH.'/../model/gettersettermodel.php';
+		$objInitiateUser = new Register ();
+		$objInitiateUser->setUser($_REQUEST['user']);
+		$b = $objInitiateUser->getPosition () ;
+		if(!empty($b[0]['name']))
+		{
+			$arr[] = $b[0]['name'];
+			$arr[] = $b[0]['avatar'];
+			$arr[] = $b[0]['position'];
+			echo json_encode($arr);
+		}
+		else
+		{
+			return "-1" ;
+		}
+	
+	}
+
+	public function setChance ()
+	{
+		require_once SITE_PATH.'/../model/gettersettermodel.php';
+		$objInitiateUser = new Register ();
+		$abc = explode("," , $_REQUEST['users']);
+		$objInitiateUser->setChance ($abc) ;	
 	}
 	public function logout ()
 	{	

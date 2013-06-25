@@ -15,7 +15,7 @@ class DBConnection {
     private static $_host = "localhost";
     private static $_user = "root";
     private static $_password ="root";
-    private static $_database = "rvcsgame";
+    private static $_database = "snakeandladder";
     private $_tableName = "";
     private $_join = "";
     private $_limit = "";

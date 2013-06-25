@@ -1,0 +1,191 @@
+var name = new Array() ;
+var userpositions = new Array() ;
+var useravatar = new Array() ;
+var temp = 0;
+var pos = 0;
+var Timer1;
+var user;
+var turn;
+var kick;
+var avatar;
+var opponent;
+var message1 = "Ok Let's Start the Game!!!";
+var message2 = "Waiting for Compatible Opponents to turn Up!!!";
+var message3 = "Please Roll The dice Again!!!";
+var message4 = "Oh Its a Snake!!!";
+var message5 = "Hurray!!! Its a Ladder!!!";
+var message6 = "Sorry!!! It total is Over hundred!!!";
+var message7 = "Hurray!!! You Have Won!!!";
+var message8 = "Sorry!!! You Have Lost!!!";
+$(document).ready(function()
+{
+	<?php 
+		if(!empty($_REQUEST['name']) && !empty($_REQUEST['turn']) && !empty($_REQUEST['kickback'])) 
+		{
+	?>
+			$("#die1").hide();
+			$("#die2").hide();
+			$("#dicerollbutton").hide();
+			user = <?php echo "'".$_REQUEST['name']."'";?>;
+			turn = <?php echo "'" .$_REQUEST['turn']."'";?>;
+			kick = <?php echo "'".$_REQUEST['kickback']."'";?>;
+			avatar = <?php echo "'" .$_REQUEST['avatar']."'" ;?>;
+			opponent = <?php echo $_REQUEST['opponent'] ; ?>;
+			$.ajax
+			({
+				type: "POST",
+        			url: '../controller/controller.php?method=insertUser&user='+user+"&turn="+turn+"&kick="+kick+"&avatar="+avatar,
+     				success: function(data)
+     				{
+     					if($.trim(data) == "1")
+					{
+						$(".player").attr("id",user);
+						$("#"+user).html("<img src='<?php echo SITE_URL;?>/images/"+ avatar + "' height='50' width='50' class='draggable2'/>");
+						Timer1 = setInterval(fetchUser, 5000);
+					}
+				}
+				
+			});		
+	<?php
+		}
+		else
+		{
+			header('Location: bendrules.php');
+		}
+	?>
+});
+
+function fetchUser()
+{
+	$.ajax
+			({
+				type: "POST",
+        			url: '../controller/controller.php?method=fetchUser&user='+user+"&turn="+turn+"&kick="+kick+"&avatar="+avatar+"&opponent="+opponent,
+     				success: function(data)
+     				{
+					if($.trim(data) != "1")
+					{
+						var resp=jQuery.parseJSON($.trim(data));
+						$.each(resp, function(key, val) 
+						{
+							temp = 1;
+							if(key % 2 == 0)
+							{
+								name[key] = val;
+							}
+							else
+							{
+								$("#"+user).append("<img src='<?php echo SITE_URL;?>/images/"+ val + "' height='50' width='50' />");
+							}
+							
+						});
+					}
+					else
+					{
+						$("#45").fadeIn();
+						$("#45").html("<span class='bubble'>"+ message2 +"</span>");
+						$("#45").fadeOut(4000);
+					}
+     				},
+				complete:function()
+				{	
+					if(temp == 1)
+     					{
+						$("#45").html("<span class='bubble'>"+ message1 +"</span>");
+						$("#45").fadeOut(8000);
+						clearInterval(Timer1);
+						name[opponent] = user;
+						$.ajax
+						({
+							type: "POST",
+        						url: '../controller/controller.php?method=updateUser&users='+name,
+							success:function(data)
+							{
+								if($.trim(data) == "1")
+								{
+									setChance();
+									Timer2 = setInterval(getChance(), 5000);
+								}
+							}
+     						});
+					}
+				}
+				
+			});
+}
+
+function getChance()
+{
+	$.ajax
+	({
+		type: "POST",
+		url: '../controller/controller.php?method=getChance',
+		success: function(data)
+		{
+			if($.trim(data) != "-1")
+			{
+				
+				var resp=jQuery.parseJSON($.trim(data));
+				if(resp == user)
+				{
+					$("#die1").show();
+					$("#die2").show();
+					$("#dicerollbutton").show();
+				}
+				else
+				{
+					$("#45").fadeIn();
+					$("#45").html("<span class='bubble'> It is "+ resp +"'s Turn!!!</span>");
+					$("#45").fadeOut(4000);
+				}
+				Timer3 = setInterval(getPosition(), 5000);
+			}
+		}
+		
+	});
+}
+
+function getPosition()
+{
+	$.ajax
+	({
+		type: "POST",
+		url: '../controller/controller.php?method=getPosition&user='+user,
+		success: function(data)
+		{
+			if($.trim(data) != "-1")
+			{
+				var usernames = new Array();
+				var resp=jQuery.parseJSON($.trim(data));
+				$.each(resp, function(key, val) 
+				{
+					
+					if(key % 2 == 0)
+					{
+						usernames[key] = val; 
+					}
+					if(key % 2 == 1)
+					{
+						useravatar[key] = val; 
+					}
+					else
+					{
+						("$"+userpositions[key]).html(" ");
+						$("#"+val).html("<img src='<?php echo SITE_URL;?>/images/"+ useravatar[key] + "' height='50' width='50' id='"+usernames[key]+"' />");
+						userpositions[key] = val;
+					}
+				});
+				
+			}
+		}
+		
+	});
+}
+function setChance()
+{
+	$.ajax
+	({
+		type: "POST",
+		url: '../controller/controller.php?method=setChance&users='+name,				
+	});
+}
