@@ -159,8 +159,6 @@ class MyClass
 		$abc = explode("," , $_REQUEST['users']);
 		$b = $objInitiateUser->updateUser ($abc) ;
 		die($b);
-		
-	
 	}
 	public function updateUserPosition ()
 	{

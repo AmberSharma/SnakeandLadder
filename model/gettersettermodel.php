@@ -60,95 +60,69 @@ class Register extends model {
 		return $this->turn;
 	}
 	
-	public function login() {
-		$this->db->Fields ( array (
-				"username",
-				"password",
-				"id" 
-		) );
-		$this->db->From ( "user" );
-		$this->db->where ( array (
-				"username" => $this->getUsername (),
-				"password" => $this->getPassword () 
-		) );
-		$this->db->Select ();
-		$result = $this->db->resultArray ();
-		if ($result) {
-			$_SESSION ['uid'] = $result [0] ['id'];
-			$_SESSION ['username'] = $result [0] ['username'];
-		}
-		return count ( $result );
-	}
-	public function updateLogged() {
-		$this->db->Fields ( array (
-				"loggedin" => "Y" 
-		) );
-		$this->db->From ( "user" );
-		$this->db->Where ( array (
-				"username" => $_SESSION ['username'] 
-		) );
-		$result = $this->db->Update ();
-		return $result;
-	}
 	
-	public function fetchturnRandom() {
-		$this->db->Fields ( array ("turnrandom"));
-		$this->db->From ( "randomvalue" );
-		$result = $this->db->Select ();
-		return $result[0]["turnrandom"];
-	}
 	
-	public function fetchslipRandom() {
-		$this->db->Fields ( array ("sliprandom"));
-		$this->db->From ( "randomvalue" );
-		$this->db->Select ();
-		$result = $this->db->resultArray ();
-		return $result[0]["sliprandom"];
-	}
 	
-	public function turnRandom() {
-		$this->db->Fields ( array ("id"));
-		$this->db->From ("randomvalue");
-		$this->db->Select ();
-		$result = $this->db->resultArray ();
-		$this->db->From ("randomvalue");
-		if(empty($result))
-		{
-			$this->db->Fields ( array ("turnrandom" => $this->getRandom1 ()));
-			$result1 = $this->db->Insert ();
-		}
-		else
-		{
-			$this->db->Fields ( array ("turnrandom" => $this->getRandom1 ()) );
-			$result1 = $this->db->Update ();
-		}
-	}
+	
 	
 	public function insertUser() {
-		$this->db->Fields ( array ("name" =>  $this->getUser () ,"turn" => $this->getTurn () , "kickback" => $this->getKickback () ,"avatar" => $this->getAvatar () , "playing" => "N" , "chance" => "N" , "position" => "0"));
+		$this->db->Fields ( array ("name" =>  $this->getUser () ,"turn" => $this->getTurn () , "kickback" => $this->getKickback () ,"avatar" => $this->getAvatar () , "playing" => "N" , "chance" => "N" , "position" => "-1"));
 		$this->db->From ( "user" );
 		$result = $this->db->Insert ();
 		return $result;
 	}
 
 	public function fetchUser() {
-		$this->db->Fields (array("avatar" , "name"));
-		$this->db->From ( "user where name != '".$this->getUser (). "' and turn = '".$this->getTurn ()."' and kickback = '".$this->getKickback ()."' and avatar != '".$this->getAvatar () ."' and playing = 'N' and chance = 'N' ");
+		$this->db->Fields (array("playing"));
+		$this->db->From ( "user");
+		$this->db->Where (array("name" => $this->getUser ()));
 		$this->db->Select ();
 		$result = $this->db->resultArray();
-		return $result;
+		$_SESSION['user'] = $this->getUser ();
+		
+		if($result[0]['playing'] != "0")
+		{
+			$_SESSION['play'] = $result[0]['playing'] ;
+			$this->db->Fields (array("avatar" , "name"));
+			$this->db->From ("user where playing =  ". $result[0]['playing'] ." and name != '".$this->getUser () . "'");
+			$this->db->Select ();
+			$result = $this->db->resultArray();
+			
+			return $result;
+		}
+		else
+		{
+			$this->db->Fields (array("avatar" , "name"));
+			$this->db->From ( "user where name != '".$this->getUser (). "' and turn = '".$this->getTurn ()."' and kickback = '".$this->getKickback ()."' and avatar != '".$this->getAvatar () ."' and playing = 'N' and chance = 'N' ");
+			$this->db->Select ();
+			$result = $this->db->resultArray();
+
+			return $result;
+		}
 	}
 	public function updateUser($users) 
 	{
-		for($i =0 ; $i < count($users) ; $i ++)
+		$this->db->Fields (array("playing"));
+		$this->db->From ( "user");
+		$this->db->Where (array("name" => $_SESSION['user']));
+		$this->db->Select ();
+		$result = $this->db->resultArray();
+		if($result[0]['playing'] == "0")
 		{
-			$this->db->Fields (array("Playing"=>"Y"));
-			$this->db->From ( "user" );
-			$this->db->Where (array("name" => $users[$i]));
-			$this->db->Update ();
+			$arr = rand(1, 100);
+			$_SESSION['play'] = $arr;
+			for($i =0 ; $i < count($users) ; $i ++)
+			{
+				$this->db->Fields (array("Playing"=>$arr));
+				$this->db->From ( "user" );
+				$this->db->Where (array("name" => $users[$i]));
+				$this->db->Update ();
+			}
+			if($i == count($users))
+			return "1";
 		}
-		if($i == count($users))
-		return "1";
+		else
+			return "-1";
 		
 	}
 
@@ -196,7 +170,7 @@ class Register extends model {
 	{
 		$this->db->Fields (array("name"));
 		$this->db->From ( "user" );
-		$this->db->Where (array("chance" => 'Y'));
+		$this->db->Where (array("chance" => 'Y' , "playing" => $_SESSION['play']));
 		$this ->db->Limit("1");
 		$this->db->Select ();
 		$result = $this->db->resultArray();
@@ -207,7 +181,7 @@ class Register extends model {
 	public function getPosition() 
 	{
 		$this->db->Fields (array("position" , "name" , "avatar"));
-		$this->db->From ( "user where name !=".$this->getUser ());
+		$this->db->From ( "user where name != '" .$this->getUser () ."'");
 		$this->db->Select ();
 		$result = $this->db->resultArray();
 		return $result;

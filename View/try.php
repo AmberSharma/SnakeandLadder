@@ -88,7 +88,7 @@ table td {
 
 
 var name = new Array() ;
-var userpositions = new Array() ;
+var userpositions = new Array("0") ;
 var useravatar = new Array() ;
 var temp = 0;
 var pos = 0;
@@ -195,8 +195,13 @@ function fetchUser()
 								if($.trim(data) == "1")
 								{
 									setChance();
-									Timer2 = setInterval(getChance(), 5000);
+									Timer2 = setInterval(getChance, 5000);
 								}
+								if($.trim(data) == "-1")
+								{
+									Timer2 = setInterval(getChance, 5000);
+								}
+								
 							}
      						});
 					}
@@ -229,7 +234,7 @@ function getChance()
 					$("#45").html("<span class='bubble'> It is "+ resp +"'s Turn!!!</span>");
 					$("#45").fadeOut(4000);
 				}
-				Timer3 = setInterval(getPosition(), 5000);
+				Timer3 = setInterval(getPosition, 5000);
 			}
 		}
 		
@@ -261,8 +266,8 @@ function getPosition()
 					}
 					else
 					{
-						("$"+userpositions[key]).html(" ");
-						$("#"+val).html("<img src='<?php echo SITE_URL;?>/images/"+ useravatar[key] + "' height='50' width='50' id='"+usernames[key]+"' />");
+						$(".player").html("");
+						$("#"+val).html("<img src='<?php echo SITE_URL;?>/images/"+ useravatar[key-1] + "' height='50' width='50' id='"+usernames[key - 2]+"' />");
 						userpositions[key] = val;
 					}
 				});
@@ -362,10 +367,11 @@ var ladderface = new Array(38,14,31,42,84,67,91,100 );
                	var sum = checkRoll(roll[0], roll[1]);
         	$("#"+pos).html('');
 		$("#"+pos).removeClass("droppable ui-droppable ui-state-highlight").addClass("draggable");
-		if(turn == '1')
+		if(turn == 'Yes')
 		{
 			if(sum == 6)
 			{
+				
 				pos += sum;
 				$("#45").html("<span class='bubble'>" + message3 + " </span>");
 			}
@@ -385,7 +391,7 @@ var ladderface = new Array(38,14,31,42,84,67,91,100 );
 							$("#84").fadeIn();
 							$("#84").html("<span class='bubble'> You can come down to " + pos + " position</span>");
 							$("#84").fadeOut(8000);
-							$temp = 1;
+							temp = 1;
 						}
 					}
 					for(var i = 0 ; i < laddertail.length ; i ++)
@@ -399,10 +405,10 @@ var ladderface = new Array(38,14,31,42,84,67,91,100 );
 							$("#96").fadeIn();
 							$("#96").html("<span class='bubble'> You can Move up to" + pos + "position</span>");
 							$("#96").fadeOut(8000);
-							$temp = 1;
+							temp = 1;
 						}
 					}
-					if($temp == 0 )
+					if(temp == 0 )
 					{
 						$("#45").fadeIn();
 						$("#45").html("<span class='bubble'>Please Move " + sum + " positions Forward </span>");
@@ -483,7 +489,7 @@ var ladderface = new Array(38,14,31,42,84,67,91,100 );
 						$("#84").fadeIn();
 						$("#84").html("<span class='bubble'> You can come down to " + pos + " position</span>");
 						$("#84").fadeOut(8000);
-						$temp = 1;
+						temp = 1;
 					}
 				}
 				for(var i = 0 ; i < laddertail.length ; i ++)
@@ -497,10 +503,10 @@ var ladderface = new Array(38,14,31,42,84,67,91,100 );
 						$("#96").fadeIn();
 						$("#96").html("<span class='bubble'> You can Move up to" + pos + "position</span>");
 						$("#96").fadeOut(8000);
-						$temp = 1;
+						temp = 1;
 					}
 				}
-				if($temp == 0 )
+				if(temp == 0 )
 				{
 					$("#45").fadeIn();
 					$("#45").html("<span class='bubble'>Please Move " + sum + " positions Forward </span>");
@@ -528,7 +534,6 @@ var ladderface = new Array(38,14,31,42,84,67,91,100 );
 							{
 								if($.trim(data) == "1")
 								{
-									alert("I m IN");
 									$("#die1").hide();
 									$("#die2").hide();
 									$("#dicerollbutton").hide();
