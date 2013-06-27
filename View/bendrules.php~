@@ -99,8 +99,8 @@ table td
 	background-size:668px 475px;
 	background-color: transparent;
   	box-shadow: 40px 40px 100px 40px #000;
-	margin-top:10%;
-	margin-left:25%;
+	margin-top:170px;
+	margin-left:340px;
 	height:475px;
 	width:670px;
 }

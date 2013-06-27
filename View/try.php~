@@ -12,9 +12,6 @@
 <head>
 <title>Snake and ladder</title>
 <style type='text/css'>
-div {
-	border: 1px solid red;
-}
 
 table td {
 	height: 10%;
@@ -33,14 +30,14 @@ table td {
 	background: white;
 }
 
-#snakeandladder {
+.snakeandladder {
 	background-image: url(<?php echo SITE_URL;?>/images/snakeandladder.jpg);
 	background-position: center;
 	background-size: 102% 102%;
 	background-repeat: no-repeat;
 }
 
-#container {
+.container {
 	background-image: url(<?php echo SITE_URL;?>/images/rolldicelogo.gif);
 	background-repeat: no-repeat;
 	background-size: 100% 100%;
@@ -78,7 +75,36 @@ table td {
 	bottom: -23px;
 	margin-left: -23px;
 }
+
+#left
+{
+	height:100%;
+	width:20%;
+	float:left;
 	
+}
+#center
+{
+	height:100%;
+	width:59%;
+	float:left;
+}
+#right
+{
+	height:100%;
+	width:21%;
+	float:right;
+	background-image: url(<?php echo SITE_URL;?>/images/messagebox.jpg);
+	background-position: center;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+}	
+
+#message
+{
+	width:80%;
+	margin-top:80%;
+}
 </style>
 
 
@@ -90,7 +116,9 @@ table td {
 var name = new Array() ;
 var userpositions = new Array("0") ;
 var useravatar = new Array() ;
+var attempt = 0;
 var temp = 0;
+var turntemp = 0;
 var pos = 0;
 var Timer1;
 var user;
@@ -166,24 +194,24 @@ function fetchUser()
 							}
 							else
 							{
-								$("#"+user).append("<img src='<?php echo SITE_URL;?>/images/"+ val + "' height='50' width='50' />");
+								$("#"+user).append("<img src='<?php echo SITE_URL;?>/images/"+ val + "' height='50' width='50' id='"+ name[key - 1] +"'/>");
 							}
 							
 						});
 					}
 					else
 					{
-						$("#45").fadeIn();
-						$("#45").html("<span class='bubble'>"+ message2 +"</span>");
-						$("#45").fadeOut(4000);
+						$("#message").fadeIn();
+						$("#message").html("<span class='bubble'>"+ message2 +"</span>");
+						$("#message").fadeOut(4000);
 					}
      				},
 				complete:function()
 				{	
 					if(temp == 1)
      					{
-						$("#45").html("<span class='bubble'>"+ message1 +"</span>");
-						$("#45").fadeOut(8000);
+						$("#message").html("<span class='bubble'>"+ message1 +"</span>");
+						$("#message").fadeOut(8000);
 						clearInterval(Timer1);
 						name[opponent] = user;
 						$.ajax
@@ -230,11 +258,15 @@ function getChance()
 				}
 				else
 				{
-					$("#45").fadeIn();
-					$("#45").html("<span class='bubble'> It is "+ resp +"'s Turn!!!</span>");
-					$("#45").fadeOut(4000);
+					$("#message").fadeIn();
+					$("#message").html("<span class='bubble'> It is "+ resp +"'s Turn!!!</span>");
+					$("#message").fadeOut(4000);
 				}
-				Timer3 = setInterval(getPosition, 5000);
+				if(attempt == 0)
+				{
+					Timer3 = setInterval(getPosition, 8000);
+					attempt = 1;
+				}
 			}
 		}
 		
@@ -256,19 +288,24 @@ function getPosition()
 				$.each(resp, function(key, val) 
 				{
 					
-					if(key % 2 == 0)
+					if(key % 3 == 0)
 					{
 						usernames[key] = val; 
 					}
-					if(key % 2 == 1)
+					else if(key % 3 == 1)
 					{
 						useravatar[key] = val; 
 					}
 					else
 					{
-						$(".player").html("");
-						$("#"+val).html("<img src='<?php echo SITE_URL;?>/images/"+ useravatar[key-1] + "' height='50' width='50' id='"+usernames[key - 2]+"' />");
 						userpositions[key] = val;
+						if(userpositions[key] != -1)
+						{
+							alert("#"+usernames[key - 2]);
+							$("#"+usernames[key - 2]).hide();
+						}
+						$("#"+val).html("<img src='<?php echo SITE_URL;?>/images/"+ useravatar[key-1] + "' height='50' width='50' id='"+usernames[key - 2]+"' />");
+						
 					}
 				});
 				
@@ -287,18 +324,19 @@ function setChance()
 }
 </script>
 <body>
-<div id='container' style="width: 20%; height: 80%; float: left;">
-	<div id="Diceroll" style='margin-top: 85%;'>
-		<div id='die1' style="width: 39%; height: 18%; margin-left: 10%; float: left;"></div>
-		<div id='die2' style="width: 39%; height: 18%; margin-left: 51%;"></div>
-		<div style='clear: left; width: 100%; margin-top: 20%;' id = "dicerollbutton">
-			<a href="#" onClick='animateRoll()' style="margin-left:9%;"><img src="<?php echo SITE_URL ?>/images/rolldice.jpg" height='60' width='220'/></a>
+<div id="left" class="container" >
+	<div style="margin-top: 70%; height: 10%;border:1px solid red;" class="player"></div>
+	<div id="Diceroll" style='border:1px solid red;'>
+		<div id='die1' style="width: 39%; height: 18%; margin-left: 10%; float: left;border:1px solid red;"></div>
+		<div id='die2' style="width: 39%; height: 18%; margin-left: 51%;border:1px solid red;"></div>
+		<div style='clear: left; width: 100%; margin-top: 20%;border:1px solid red;' id = "dicerollbutton">
+			<a href="javascript:void(0)" onClick='animateRoll()' style="margin-left:9%;"><img src="<?php echo SITE_URL ?>/images/rolldice.jpg" height='60' width='220'/></a>
 		</div>
-		<div style="margin-top: 20%; height: 10%" class="player"></div>
 	</div>
+
 </div>
-<div id='snakeandladder' style="width: 70%; height: 100%; margin-left: 21%;">
-	<table style="width: 100%; height: 100%; text-align: center; white-space: normal;" cellspacing="0" cellpadding="0">
+<div id="center" class="snakeandladder">
+<table style="width: 100%; height: 100%; text-align: center; white-space: normal;" cellspacing="0" cellpadding="0">
 <?php
 
 $k = 10;
@@ -346,6 +384,10 @@ for($j = 0; $j < 10; $j ++) {
 
 </table>
 	</div>
+</div>
+<div id ="right">
+<center><div id="message"></div></center>
+</div>
 </body>
 </html>
 <script type='text/javascript'> 
@@ -371,9 +413,8 @@ var ladderface = new Array(38,14,31,42,84,67,91,100 );
 		{
 			if(sum == 6)
 			{
-				
 				pos += sum;
-				$("#45").html("<span class='bubble'>" + message3 + " </span>");
+				$("#message").html("<span class='bubble'>" + message3 + " </span>");
 			}
 			else
 			{
@@ -384,41 +425,41 @@ var ladderface = new Array(38,14,31,42,84,67,91,100 );
 					{
 						if(pos == snakeface[i])
 						{
-							$("#45").fadeIn();
-							$("#45").html("<span class='bubble'>" + message4 + " </span>");
-							$("#45").fadeOut(8000);
+							$("#message").fadeIn();
+							$("#message").html("<span class='bubble'>" + message4 + " </span>");
+							$("#message").fadeOut(8000);
 							pos = snaketail[i];
-							$("#84").fadeIn();
-							$("#84").html("<span class='bubble'> You can come down to " + pos + " position</span>");
-							$("#84").fadeOut(8000);
-							temp = 1;
+							$("#message").fadeIn();
+							$("#message").html("<span class='bubble'> You can come down to " + pos + " position</span>");
+							$("#message").fadeOut(8000);
+							turntemp = 1;
 						}
 					}
 					for(var i = 0 ; i < laddertail.length ; i ++)
 					{
 						if(pos == laddertail[i])
 						{
-							$("#45").fadeIn();
-							$("#45").html("<span class='bubble'>" + message5 + " </span>");
-							$("#45").fadeOut(8000);
+							$("#message").fadeIn();
+							$("#message").html("<span class='bubble'>" + message5 + " </span>");
+							$("#message").fadeOut(8000);
 							pos = ladderface[i];
-							$("#96").fadeIn();
-							$("#96").html("<span class='bubble'> You can Move up to" + pos + "position</span>");
-							$("#96").fadeOut(8000);
-							temp = 1;
+							$("#message").fadeIn();
+							$("#message").html("<span class='bubble'> You can Move up to" + pos + "position</span>");
+							$("#message").fadeOut(8000);
+							turntemp = 1;
 						}
 					}
-					if(temp == 0 )
+					if(turntemp == 0 )
 					{
-						$("#45").fadeIn();
-						$("#45").html("<span class='bubble'>Please Move " + sum + " positions Forward </span>");
-						$("#45").fadeOut(8000);
+						$("#message").fadeIn();
+						$("#message").html("<span class='bubble'>Please Move " + sum + " positions Forward </span>");
+						$("#message").fadeOut(8000);
 					}
 					if(pos == 100)
 					{
-						$("#45").fadeIn();
-						$("#45").html("<span class='bubble'>" + message7 + "</span>");
-						$("#45").fadeOut(8000);
+						$("#message").fadeIn();
+						$("#message").html("<span class='bubble'>" + message7 + "</span>");
+						$("#message").fadeOut(8000);
 					}
 					$("#"+pos).attr("class" , "droppable");
 					$( ".draggable" ).draggable({ revert: "valid" });
@@ -429,6 +470,7 @@ var ladderface = new Array(38,14,31,42,84,67,91,100 );
 						hoverClass: "ui-state-active",
 						drop: function( event, ui ) 
 						{
+							$( this ).addClass( "ui-state-highlight" )
 							var position = this.id;
 							$.ajax
 							({
@@ -452,9 +494,9 @@ var ladderface = new Array(38,14,31,42,84,67,91,100 );
 				}
 				else
 				{
-					$("#45").fadeIn();
-					$("#45").html("<span class='bubble'>" + message6 + " </span>");
-					$("#45").fadeOut(8000);
+					$("#message").fadeIn();
+					$("#message").html("<span class='bubble'>" + message6 + " </span>");
+					$("#message").fadeOut(8000);
 					pos -= sum;
 					$.ajax
 					({
@@ -482,41 +524,41 @@ var ladderface = new Array(38,14,31,42,84,67,91,100 );
 				{
 					if(pos == snakeface[i])
 					{
-						$("#45").fadeIn();
-						$("#45").html("<span class='bubble'>" + message4 + " </span>");
-						$("#45").fadeOut(8000);
+						$("#message").fadeIn();
+						$("#message").html("<span class='bubble'>" + message4 + " </span>");
+						$("#message").fadeOut(8000);
 						pos = snaketail[i];
-						$("#84").fadeIn();
-						$("#84").html("<span class='bubble'> You can come down to " + pos + " position</span>");
-						$("#84").fadeOut(8000);
-						temp = 1;
+						$("#message").fadeIn();
+						$("#message").html("<span class='bubble'> You can come down to " + pos + " position</span>");
+						$("#message").fadeOut(8000);
+						turntemp = 1;
 					}
 				}
 				for(var i = 0 ; i < laddertail.length ; i ++)
 				{
 					if(pos == laddertail[i])
 					{
-						$("#45").fadeIn();
-						$("#45").html("<span class='bubble'>" + message5 + " </span>");
-						$("#45").fadeOut(8000);
+						$("#message").fadeIn();
+						$("#message").html("<span class='bubble'>" + message5 + " </span>");
+						$("#message").fadeOut(8000);
 						pos = ladderface[i];
-						$("#96").fadeIn();
-						$("#96").html("<span class='bubble'> You can Move up to" + pos + "position</span>");
-						$("#96").fadeOut(8000);
-						temp = 1;
+						$("#message").fadeIn();
+						$("#message").html("<span class='bubble'> You can Move up to" + pos + "position</span>");
+						$("#message").fadeOut(8000);
+						turntemp = 1;
 					}
 				}
-				if(temp == 0 )
+				if(turntemp == 0 )
 				{
-					$("#45").fadeIn();
-					$("#45").html("<span class='bubble'>Please Move " + sum + " positions Forward </span>");
-					$("#45").fadeOut(8000);
+					$("#message").fadeIn();
+					$("#message").html("<span class='bubble'>Please Move " + sum + " positions Forward </span>");
+					$("#message").fadeOut(8000);
 				}
 				if(pos == 100)
 				{
-					$("#45").fadeIn();
-					$("#45").html("<span class='bubble'>" + message7 + "</span>");
-					$("#45").fadeOut(8000);
+					$("#message").fadeIn();
+					$("#message").html("<span class='bubble'>" + message7 + "</span>");
+					$("#message").fadeOut(8000);
 				}
 				$("#"+pos).attr("class" , "droppable");
 				$( ".draggable" ).draggable({ revert: "valid" });
@@ -543,17 +585,13 @@ var ladderface = new Array(38,14,31,42,84,67,91,100 );
 		
 					}
 				});
-
-
-
-			       $("#"+pos).html("");
 			       return;
 			}
 			else
 				{
-					$("#45").fadeIn();
-					$("#45").html("<span class='bubble'>" + message6 + " </span>");
-					$("#45").fadeOut(8000);
+					$("#message").fadeIn();
+					$("#message").html("<span class='bubble'>" + message6 + " </span>");
+					$("#message").fadeOut(8000);
 					pos -= sum;
 					$.ajax
 					({

@@ -6,20 +6,23 @@ class Register extends model {
 	protected $user;
 	protected $avatar;
 	protected $turn;
-	protected $kickback;
+	protected $method;
 	
 	/**
 	 * @return the $random1
 	 */
-	public function getKickback() {
-		return $this->kickback;
+	
+
+
+	public function getMethod() {
+		return $this->method;
 	}
 
 	/**
 	 * @param field_type $random1
 	 */
-	public function setKickback($kickback) {
-		$this->kickback = $kickback;
+	public function setMethod($method) {
+		$this->method = $method;
 	}
 
 	/**
@@ -66,7 +69,7 @@ class Register extends model {
 	
 	
 	public function insertUser() {
-		$this->db->Fields ( array ("name" =>  $this->getUser () ,"turn" => $this->getTurn () , "kickback" => $this->getKickback () ,"avatar" => $this->getAvatar () , "playing" => "N" , "chance" => "N" , "position" => "-1"));
+		$this->db->Fields ( array ("name" =>  $this->getUser () ,"turn" => $this->getTurn ()  ,"avatar" => $this->getAvatar () , "playing" => "N" , "chance" => "N" , "position" => "-1" , "method" => $this->getMethod ()));
 		$this->db->From ( "user" );
 		$result = $this->db->Insert ();
 		return $result;
@@ -93,10 +96,9 @@ class Register extends model {
 		else
 		{
 			$this->db->Fields (array("avatar" , "name"));
-			$this->db->From ( "user where name != '".$this->getUser (). "' and turn = '".$this->getTurn ()."' and kickback = '".$this->getKickback ()."' and avatar != '".$this->getAvatar () ."' and playing = 'N' and chance = 'N' ");
+			$this->db->From ( "user where name != '".$this->getUser (). "' and turn = '".$this->getTurn ()."' and  avatar != '".$this->getAvatar () ."' and playing = '0' and chance = 'N' and method = '". $this->getMethod () . "'");
 			$this->db->Select ();
 			$result = $this->db->resultArray();
-
 			return $result;
 		}
 	}
@@ -188,11 +190,18 @@ class Register extends model {
 		
 	}
 
+	public function deleteUser() 
+	{
+		$this->db->From ( "user");
+		$this->db->Where (array("name" => $this->getUser()));
+		$this->db->Delete ();		
+		echo $this->db->lastQuery(); 
+	}
+
 	public function setChance($users) 
 	{
 		for($i =0 ; $i < count($users) ; $i ++)
 		{
-			
 			$this->db->Fields (array("chance" , "name"));
 			$this->db->From ( "user" );
 			$this->db->Where (array("name" => $users[$i]));
@@ -212,21 +221,7 @@ class Register extends model {
 		}		
 	}
 
-	public function userScoreTable() {
-		$this->db->Fields ( array ("table_name") );
-		$this->db->From ( "information_schema.tables" );
-		$this->db->Where ( array ("table_schema" => "rvcsgame" , "table_name" =>$_SESSION ['user1'][0].$_SESSION ['user2'][0].$_SESSION ['user3'][0].$_SESSION ['user4'][0]."score" ) );
-		$this->db->Select ();
-		//$this ->db->Limit("4");
-		$result = $this->db->resultArray ();
-		if(empty($result))
-		{
-			$this->db->Create ("create table ".$_SESSION ['user1'][0].$_SESSION ['user2'][0].$_SESSION ['user3'][0].$_SESSION ['user4'][0]. "score (id int primary key auto_increment ," . $_SESSION ['user1'] . " int ," . $_SESSION ['user2'] . " int ,". $_SESSION ['user3'] . " int ," .$_SESSION ['user4'] . " int )");
-
-			$this->db->Create ("create table ".$_SESSION ['user1'][0].$_SESSION ['user2'][0].$_SESSION ['user3'][0].$_SESSION ['user4'][0]. "message (id int primary key auto_increment , user varchar(40) ,message varchar(200) ,status char )");
-		}
-		
-		}
+	
 
 
 	public function logOut() {

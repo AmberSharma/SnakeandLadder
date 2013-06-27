@@ -71,6 +71,15 @@ class MyClass
 		$objInitiateUser = new Register ();
 		$b=$objInitiateUser->assignUserSpace () ;
 	}
+
+	public function deleteUser ()
+	{
+		require_once SITE_PATH.'/../model/gettersettermodel.php';
+		$objInitiateUser = new Register ();
+		$objInitiateUser->setUser($_REQUEST['user']);
+		$b=$objInitiateUser->deleteUser() ;
+		
+	}
 	
 	public function fetchPlayingUser ()
 	{
@@ -110,8 +119,8 @@ class MyClass
 		$objInitiateUser = new Register ();
 		$objInitiateUser->setUser($_REQUEST['user']);
 		$objInitiateUser->setTurn($_REQUEST['turn']);
-		$objInitiateUser->setKickback($_REQUEST['kick']);
 		$objInitiateUser->setAvatar($_REQUEST['avatar']);
+		$objInitiateUser->setMethod($_REQUEST['method1']);
 		$b = $objInitiateUser->insertUser () ;
 		if($b)
 		{
@@ -126,8 +135,8 @@ class MyClass
 		$objInitiateUser = new Register ();
 		$objInitiateUser->setUser($_REQUEST['user']);
 		$objInitiateUser->setTurn($_REQUEST['turn']);
-		$objInitiateUser->setKickback($_REQUEST['kick']);
 		$objInitiateUser->setAvatar($_REQUEST['avatar']);
+		$objInitiateUser->setMethod($_REQUEST['method1']);
 		$b = $objInitiateUser->fetchUser () ;
 		if($b)
 		{

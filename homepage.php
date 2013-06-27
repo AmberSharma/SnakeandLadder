@@ -68,8 +68,8 @@ height:115px;
 	background-size:668px 475px;
 	background-color: transparent;
   	box-shadow: 40px 40px 100px 40px #000;
-	margin-top:170px;
-	margin-left:340px;
+	margin-top:10%;
+	margin-left:25%;
 	height:475px;
 	width:670px;
 }
@@ -88,7 +88,7 @@ html {
 <table cellspacing="0">
 <tr>
 <td>
-<a href="index.php"><img src="images/startgame.jpg" height='60' width='220'/></a>
+<a href="<?php echo SITE_URL ?>/View/bendrules.php"><img src="images/startgame.jpg" height='60' width='220'/></a>
 </td>
 
 </tr>
