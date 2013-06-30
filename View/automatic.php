@@ -603,6 +603,7 @@ function func1(pos)
 			}				
 		});
 		setChance();
+		printed = 0;
 	}
 }
 function func2(pos)
@@ -634,6 +635,7 @@ function func2(pos)
 				}				
 			});
 			setChance();
+			printed = 0;
 	}
 	
 }
@@ -661,11 +663,11 @@ function func2(pos)
 <body>
 
 	<div id="left" class="container" >
-	<div style="margin-top: 70%; height: 10%;border:1px solid red;" class="player"></div>
-	<div id="Diceroll" style='border:1px solid red;'>
-		<div id='die1' style="width: 39%; height: 18%; margin-left: 10%; float: left;border:1px solid red;"></div>
-		<div id='die2' style="width: 39%; height: 18%; margin-left: 51%;border:1px solid red;"></div>
-		<div style='clear: left; width: 100%; margin-top: 20%;border:1px solid red;' id = "dicerollbutton">
+	<div style="margin-top: 70%; height: 10%;" class="player"></div>
+	<div id="Diceroll">
+		<div id='die1' style="width: 39%; height: 18%; margin-left: 10%; float: left;"></div>
+		<div id='die2' style="width: 39%; height: 18%; margin-left: 51%;"></div>
+		<div style='clear: left; width: 100%; margin-top: 20%;' id = "dicerollbutton">
 			<a href="javascript:void(0)" onClick='animateRoll()' style="margin-left:9%;"><img src="<?php echo SITE_URL ?>/images/rolldice.jpg" height='60' width='220'/></a>
 		</div>
 	</div>
