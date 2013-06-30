@@ -283,34 +283,41 @@ function getPosition()
 			{
 				var usernames = new Array();
 				var resp=jQuery.parseJSON($.trim(data));
+				var ua = 0;
+				var un = 0;
+				var up = 0;
 				$.each(resp, function(key, val) 
 				{
-					
 					if(key % 3 == 0)
 					{
-						usernames[key] = val; 
+						usernames[un] = val;
+						un ++; 
 					}
 					else if(key % 3 == 1)
 					{
-						useravatar[key] = val; 
+						useravatar[ua] = val;
+						ua ++; 
 					}
 					else
 					{
-						userpositions[key] = val;
-						if(userpositions[key] >=  100)
+						userpositions[up] = val;
+						if(userpositions[up] >=  100)
 						{
-							alert(message8);
-							clearInterval(Timer2);
-							clearInterval(Timer3);
-							clearTimer(Timer4);
-							window.location.href= "bendrules.php?name="+user;
+							if (confirm(message8)) 
+							{
+								clearInterval(Timer2);
+								clearInterval(Timer3);
+								window.location.href= "bendrules.php?name="+user;
+							}
 						}
-						if(userpositions[key] != -1)
+						if(userpositions[up] != -1)
 						{
-							$("#"+previousposition).html(" ");
+							if(typeof previousposition[usernames[un - 1]] !== 'undefined')
+							$("#"+previousposition[usernames[un - 1]]).html(" ");
 						}
-						$("#"+val).html("<img src='<?php echo SITE_URL;?>/images/"+ useravatar[key-1] + "' height='50' width='50' id='"+usernames[key - 2]+"' />");
-						previousposition = val;
+						$("#"+ val).html("<img src='<?php echo SITE_URL;?>/images/"+ useravatar[ua - 1] + "' height='50' width='50' id='"+usernames[un - 1]+"' />");
+						previousposition[usernames[un - 1]] = val;
+						up ++;
 					}
 				});
 				
@@ -405,7 +412,11 @@ for($j = 0; $j < 10; $j ++)
 </html>
 <script type='text/javascript'> 
 var pos = 0;
+var place = 0;
 var firstturn = 0;
+var userpositions = new Array("0") ;
+var useravatar = new Array() ;
+var previousposition = new Array();
 var snakeface = new Array(17,54,62,64,87,93,95,98 );
 var snaketail = new Array(7,34,19,60,24,73,75,79 );
 var laddertail = new Array(1,4,9,21,28,51,71,80 );
@@ -417,10 +428,8 @@ function animateRoll(times)
         drawRoll(roll[0], roll[1]);
         if (times > 10)
         {
-		
 		var sum = checkRoll(roll[0], roll[1]);
-        	$("#"+pos).html('');
-		$("#"+pos).removeClass("droppable ui-droppable ui-state-highlight").addClass("draggable");
+		$("#"+place).removeClass("droppable ui-droppable ui-state-highlight").addClass("draggable");
 		if(turn == 'Yes')
 		{
 			if(sum == 6)
@@ -433,47 +442,42 @@ function animateRoll(times)
 			}
 			else
 			{
-				if(pos)
-				{
-					$(".player").html(" ");
-				}
 				if(firstturn)
 				{
 					
-					last = (pos + sum + firstturn); 
-					pos = pos +  (sum + firstturn);
+					last = (place + sum + firstturn); 
+					place = place +  (sum + firstturn);
 				}
 				else
 				{
-					last = (pos + sum); 
-					pos = pos + sum;
-					alert(pos);
+					last = (place + sum); 
+					place = place + sum;
 				}
 				
 				for(var i = 0 ; i < snakeface.length ; i ++)
 				{
-					if(pos == snakeface[i])
+					if(place == snakeface[i])
 					{
 						$("#message").fadeIn();
 						$("#message").html("<span class='bubble'>" + message4 + " </span>");
 						$("#message").fadeOut(8000);
-						pos = snaketail[i];
+						place = snaketail[i];
 						$("#message").fadeIn();
-						$("#message").html("<span class='bubble'> You can come down to " + pos + " position</span>");
+						$("#message").html("<span class='bubble'> You can come down to " + place + " position</span>");
 						$("#message").fadeOut(8000);
 						turntemp = 1;
 					}
 				}
 				for(var i = 0 ; i < laddertail.length ; i ++)
 				{
-					if(pos == laddertail[i])
+					if(place == laddertail[i])
 					{
 						$("#message").fadeIn();
 						$("#message").html("<span class='bubble'>" + message5 + " </span>");
 						$("#message").fadeOut(8000);
-						pos = ladderface[i];
+						place = ladderface[i];
 						$("#message").fadeIn();
-						$("#message").html("<span class='bubble'> You can Move up to" + pos + "position</span>");
+						$("#message").html("<span class='bubble'> You can Move up to" + place + "position</span>");
 						$("#message").fadeOut(8000);
 						turntemp = 1;
 					}
@@ -491,17 +495,9 @@ function animateRoll(times)
 					}
 					$("#message").fadeOut(8000);
 				}
-				if(pos >= 100)
-				{
-					alert(message7);
-					clearInterval(Timer2);
-					clearInterval(Timer3);
-					clearTimer(Timer4);
-					window.location.href= "bendrules.php?name="+user;
-				}
 				firstturn = 0;
-				alert(parseInt(pos));
-				$("#"+pos).attr("class" , "droppable");
+				alert(place);
+				$("#"+place).attr("class" , "droppable");
 				$( ".draggable" ).draggable({ revert: "valid" });
 				$( ".draggable2" ).draggable({ revert: "invalid" });
 				$( ".droppable" ).droppable
@@ -526,95 +522,109 @@ function animateRoll(times)
 								}
 							}				
 						});
+						if(position >= 100)
+						{
+							if (confirm(message7)) 
+							{
+								clearInterval(Timer2);
+								clearInterval(Timer3);
+								window.location.href="bendrules.php?name="+user;
+							}
+						}
 		
 					}
 				});
 			        return;
 			}
 		}
-	}
-	else
-	{
-		if(pos)
+		else
 		{
-			$(".player").html(" ");
-		}
-		last = (pos + sum); 
-		pos += sum;
-		if(pos <= 100)
-		{
-			for(var i = 0 ; i < snakeface.length ; i ++)
+			last = (place + sum); 
+			place = place + sum;
+			if(place <= 100)
 			{
-				if(pos == snakeface[i])
+				for(var i = 0 ; i < snakeface.length ; i ++)
 				{
-					$("#message").fadeIn();
-					$("#message").html("<span class='bubble'>" + message4 + " </span>");
-					$("#message").fadeOut(8000);
-					pos = snaketail[i];
-					$("#message").fadeIn();
-					$("#message").html("<span class='bubble'> You can come down to " + pos + " position</span>");
-					$("#message").fadeOut(8000);
-					turntemp = 1;
+					if(place == snakeface[i])
+					{
+						$("#message").fadeIn();
+						$("#message").html("<span class='bubble'>" + message4 + " </span>");
+						$("#message").fadeOut(8000);
+						place = snaketail[i];
+						$("#message").fadeIn();
+						$("#message").html("<span class='bubble'> You can come down to " + place + " position</span>");
+						$("#message").fadeOut(8000);
+						turntemp = 1;
+					}
 				}
-			}
-			for(var i = 0 ; i < laddertail.length ; i ++)
-			{
-				if(pos == laddertail[i])
+				for(var i = 0 ; i < laddertail.length ; i ++)
 				{
-					$("#message").fadeIn();
-					$("#message").html("<span class='bubble'>" + message5 + " </span>");
-					$("#message").fadeOut(8000);
-					pos = ladderface[i];
-					$("#message").fadeIn();
-					$("#message").html("<span class='bubble'> You can Move up to" + pos + "position</span>");
-					$("#message").fadeOut(8000);
-					turntemp = 1;
+					if(place == laddertail[i])
+					{
+						$("#message").fadeIn();
+						$("#message").html("<span class='bubble'>" + message5 + " </span>");
+						$("#message").fadeOut(8000);
+						place = ladderface[i];
+						$("#message").fadeIn();
+						$("#message").html("<span class='bubble'> You can Move up to" + place + "position</span>");
+						$("#message").fadeOut(8000);
+						turntemp = 1;
+					}
 				}
-			}
-			if(turntemp == 0 )
-			{
-				$("#message").fadeIn();
-				$("#message").html("<span class='bubble'>Please Move " + sum + " positions Forward </span>");
-				$("#message").fadeOut(8000);
-			}
-			if(pos >= 100)
-			{
-				alert(message7);
-				clearInterval(Timer2);
-				clearInterval(Timer3);
-				clearTimer(Timer4);
-				window.location.href= "bendrules.php?name="+user;
-			}
-			$("#"+pos).attr("class" , "droppable");
-			$( ".draggable" ).draggable({ revert: "valid" });
-			$( ".draggable2" ).draggable({ revert: "invalid" });
-			$( ".droppable" ).droppable
-			({
-				activeClass: "ui-state-hover",
-				hoverClass: "ui-state-active",
-				drop: function( event, ui ) 
+				if(turntemp == 0 )
 				{
-					var position = this.id;
-					$.ajax
-					({
-						type: "POST",
-						url: '../controller/controller.php?method=updateUserPosition&users='+name+"&user="+user+"&pos="+position,				
-						success:function(data)
-						{
-							if($.trim(data) == "1")
+					$("#message").fadeIn();
+					$("#message").html("<span class='bubble'>Please Move " + sum + " positions Forward </span>");
+					$("#message").fadeOut(8000);
+				}
+				if(place > 100)
+				{
+					$("#100").attr("class" , "droppable");
+				}
+				else
+				{
+					$("#"+place).attr("class" , "droppable");
+				}
+				$( ".draggable" ).draggable({ revert: "valid" });
+				$( ".draggable2" ).draggable({ revert: "invalid" });
+				$( ".droppable" ).droppable
+				({
+					activeClass: "ui-state-hover",
+					hoverClass: "ui-state-active",
+					drop: function( event, ui ) 
+					{
+						var position = this.id;
+						
+						$.ajax
+						({
+							type: "POST",
+							url: '../controller/controller.php?method=updateUserPosition&users='+name+"&user="+user+"&pos="+position,				
+							success:function(data)
 							{
-								$("#die1").hide();
-								$("#die2").hide();
-								$("#dicerollbutton").hide();
+								if($.trim(data) == "1")
+								{
+									$("#die1").hide();
+									$("#die2").hide();
+									$("#dicerollbutton").hide();
+								}
+							}				
+						});
+						if(position >= 100)
+						{
+							if(confirm(message7))
+							{
+								clearInterval(Timer2);
+								clearInterval(Timer3);
+								window.location.href= "bendrules.php?name="+user;
 							}
-						}				
-					});
+						}
 	
-				}
-			});
-			return;
-		}
+					}
+				});
+				return;
+			}
 			
+		}
 	}
 	setTimeout('animateRoll(' + (times + 1) + ')', 200);
 }

@@ -65,13 +65,16 @@ height:115px;
 	border:1px solid green;
 	background-image:url(<?php echo SITE_URL .'/images/sandllogo.jpg' ?>);
 	background-repeat:no-repeat;
-	background-size:668px 475px;
 	background-color: transparent;
   	box-shadow: 40px 40px 100px 40px #000;
 	margin-top:10%;
 	margin-left:25%;
 	height:475px;
 	width:670px;
+	-webkit-background-size: cover;
+    	-moz-background-size: cover;
+    	-o-background-size: cover;
+    	background-size: cover;
 }
 html { 
     background: url(<?php echo SITE_URL .'/images/backgroundimage.jpg' ?>) no-repeat center center fixed #000; 

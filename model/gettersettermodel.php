@@ -90,7 +90,6 @@ class Register extends model {
 			$this->db->From ("user where playing =  ". $result[0]['playing'] ." and name != '".$this->getUser () . "'");
 			$this->db->Select ();
 			$result = $this->db->resultArray();
-			
 			return $result;
 		}
 		else
@@ -111,7 +110,7 @@ class Register extends model {
 		$result = $this->db->resultArray();
 		if($result[0]['playing'] == "0")
 		{
-			$arr = rand(1, 100);
+			$arr = rand(1, 500);
 			$_SESSION['play'] = $arr;
 			for($i =0 ; $i < count($users) ; $i ++)
 			{
@@ -138,6 +137,8 @@ class Register extends model {
 		if ($result)
 		{
 			$a = 0;
+			
+			sort($users);
 			for($i =0 ; $i < count($users) ; $i ++)
 			{
 				if(($users[$i] == $user) && ($i != (count($users) - 1)))
@@ -150,6 +151,7 @@ class Register extends model {
 					$this->db->From ( "user" );
 					$this->db->Where (array("name" => $users[$i]));
 					$result1 = $this->db->Update ();
+					break;
 				}
 				if(($i == (count($users) - 1)) && ($a == 0))
 				{
@@ -157,6 +159,7 @@ class Register extends model {
 					$this->db->From ( "user" );
 					$this->db->Where (array("name" => $users[0]));
 					$result1 = $this->db->Update ();
+					break;
 				}
 			}
 			
@@ -170,23 +173,30 @@ class Register extends model {
 
 	public function getChance() 
 	{
+		
+
 		$this->db->Fields (array("name"));
 		$this->db->From ( "user" );
 		$this->db->Where (array("chance" => 'Y' , "playing" => $_SESSION['play']));
 		$this ->db->Limit("1");
 		$this->db->Select ();
-		$result = $this->db->resultArray();
-		return $result;
+		$result1 = $this->db->resultArray();
+		return $result1;
 		
 	}
 
 	public function getPosition() 
 	{
-		$this->db->Fields (array("position" , "name" , "avatar"));
-		$this->db->From ( "user where name != '" .$this->getUser () ."'");
+		$this->db->Fields (array("playing"));
+		$this->db->From ( "user" );
+		$this->db->Where (array("name" => $_SESSION['user']));
 		$this->db->Select ();
 		$result = $this->db->resultArray();
-		return $result;
+		$this->db->Fields (array("position" , "name" , "avatar"));
+		$this->db->From ( "user where name != '" . $this->getUser () ."'  and playing = '" . $result[0]['playing'] . "'");
+		$this->db->Select ();
+		$result1 = $this->db->resultArray();
+		return $result1;
 		
 	}
 
@@ -200,6 +210,7 @@ class Register extends model {
 
 	public function setChance($users) 
 	{
+		sort($users);
 		for($i =0 ; $i < count($users) ; $i ++)
 		{
 			$this->db->Fields (array("chance" , "name"));

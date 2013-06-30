@@ -37,11 +37,17 @@ label
 {
 	color:#FFFFFF;
 	font-size:11px;
+	font-family: "Courier New", Courier, mono;
+font-style: normal;
+font-weight: 700;
 }
 table td
 {
 color:#FFFFFF;
 font-size:11px;
+font-family: "Courier New", Courier, mono;
+font-style: normal;
+font-weight: 700;
 }
 .total
 {
@@ -52,7 +58,7 @@ margin-right:auto;
 }
 .slidepanel
 {
-width:100%;
+width:60%;
 height:100%;
 overflow-x: hidden;
 overflow-y: hidden;
@@ -81,28 +87,28 @@ text-decoration:none;
 table
 {
 margin-top:1%;
-margin-left:26%;
-width:500px;
+margin-left:30%;
+width:400px;
 height:50px;
 
 }
-table td
-{
-	border:1px solid red;
-}
+
 
 #container
 {
 	border:1px solid green;
 	background-image:url(<?php echo SITE_URL .'/images/bg.jpg' ?>);
 	background-repeat:no-repeat;
-	background-size:668px 475px;
 	background-color: transparent;
   	box-shadow: 40px 40px 100px 40px #000;
 	margin-top:10%;
 	margin-left:25%;
 	height:475px;
 	width:670px;
+	-webkit-background-size: cover;
+    	-moz-background-size: cover;
+    	-o-background-size: cover;
+    	background-size: cover;
 }
 html { 
     background: url(<?php echo SITE_URL .'/images/backgroundimage.jpg' ?>) no-repeat center center fixed #000; 
@@ -120,7 +126,7 @@ center
 </head>
 <body>
 <?php
-if(isset($_REQUEST['user']))
+if(isset($_REQUEST['name']))
 {
 ?>
 <script>
@@ -129,7 +135,7 @@ if(isset($_REQUEST['user']))
 
 function deleteuser()
 {
-	var user = <?php echo "'" . $_REQUEST['user'] . "'" ;?>;
+	var user = <?php echo "'" . $_REQUEST['name'] . "'" ;?>;
 	$.ajax
 	({
 		type: "POST",
@@ -151,6 +157,7 @@ function deleteuser()
 					<label>Your Name:</label><br /><input type="text" name="name" ></input>
 				</td>
 			</tr>
+			
 			<tr>
 				<td>
 					<label>No. of Opponents:</label><br /><input type="text" name="opponent" ></input>
@@ -172,7 +179,7 @@ function deleteuser()
 			</tr>
 			
 				</table>	
-					<div style="margin-left:26%;width:60%;">
+					<div style="margin-left:30%;width:60%;">
 					<label>Choose Your Avatar!</label>
 					<div class="total">
 						<div class="slidepanel">

@@ -126,6 +126,10 @@ class MyClass
 		{
 			die("1");
 		}
+		else
+		{
+			die("-1");
+		}
 	
 	}
 
@@ -202,9 +206,12 @@ class MyClass
 		$b = $objInitiateUser->getPosition () ;
 		if(!empty($b[0]['name']))
 		{
-			$arr[] = $b[0]['name'];
-			$arr[] = $b[0]['avatar'];
-			$arr[] = $b[0]['position'];
+			for($i = 0 ; $i < count($b) ; $i++)
+			{
+				$arr[] = $b[$i]['name'];
+				$arr[] = $b[$i]['avatar'];
+				$arr[] = $b[$i]['position'];
+			}
 			echo json_encode($arr);
 		}
 		else
