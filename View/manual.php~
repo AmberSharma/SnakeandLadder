@@ -8,107 +8,10 @@
 <script src="<?php echo SITE_URL;?>/js/jquery.ui.draggable.js"></script>
 <script src="<?php echo SITE_URL;?>/js/jquery.ui.droppable.js"></script>
 <script src="<?php echo SITE_URL;?>/js/functions.js"></script>
+<link rel="stylesheet" href="<?php echo SITE_URL; ?>/css/automatic.css">
 <html>
 <head>
 <title>Snake and ladder</title>
-<style type='text/css'>
-
-table td {
-	height: 10%;
-	width: 10%;
-}
-
-#roll {
-	clear: left;
-	float: left;
-	width: 520px;
-	height: 24pt;
-	margin: 40px 0 0 0;
-	font-size: 18pt;
-	font-weight: bold;
-	border-style: outset;
-	background: white;
-}
-
-.snakeandladder {
-	background-image: url(<?php echo SITE_URL;?>/images/snakeandladder.jpg);
-	background-position: center;
-	background-size: 102% 102%;
-	background-repeat: no-repeat;
-}
-
-.container {
-	background-image: url(<?php echo SITE_URL;?>/images/rolldicelogo.gif);
-	background-repeat: no-repeat;
-	background-size: 100% 100%;
-}
-
-.bubble {
-	background-color: #FFAB00;
-	border: 2px solid #333;
-	border-radius: 5px;
-	color: #333;
-	display: inline-block;
-	font: 16px/24px sans-serif;
-	padding: 12px 24px;
-	position: relative;
-}
-
-.bubble:after,.bubble:before {
-	border-left: 20px solid transparent;
-	border-right: 20px solid transparent;
-	border-top: 20px solid #FFAB00;
-	bottom: -20px;
-	content: '';
-	left: 50%;
-	margin-left: -20px;
-	position: absolute;
-}
-
-/* Styling for second triangle (border) */
-.bubble:before {
-	border-left: 23px solid transparent;
-	border-right: 23px solid transparent;
-	border-top: 23px solid;
-	border-top-color: inherit;
-	/* Can't be included in the shorthand to work */
-	bottom: -23px;
-	margin-left: -23px;
-}
-
-#left
-{
-	height:100%;
-	width:20%;
-	float:left;
-	
-}
-#center
-{
-	height:100%;
-	width:59%;
-	float:left;
-}
-#right
-{
-	height:100%;
-	width:21%;
-	float:right;
-	background-image: url(<?php echo SITE_URL;?>/images/messagebox.jpg);
-	background-position: center;
-	background-size: 100% 100%;
-	background-repeat: no-repeat;
-}	
-
-#message
-{
-	width:80%;
-	margin-top:80%;
-}
-</style>
-
-
-
 </head>
 <script>
 
@@ -337,11 +240,11 @@ function setChance()
 </script>
 <body>
 <div id="left" class="container" >
-	<div style="margin-top: 70%; height: 10%;border:1px solid red;" class="player"></div>
-	<div id="Diceroll" style='border:1px solid red;'>
-		<div id='die1' style="width: 39%; height: 18%; margin-left: 10%; float: left;border:1px solid red;"></div>
-		<div id='die2' style="width: 39%; height: 18%; margin-left: 51%;border:1px solid red;"></div>
-		<div style='clear: left; width: 100%; margin-top: 20%;border:1px solid red;' id = "dicerollbutton">
+	<div style="margin-top: 70%; height: 10%;" class="player"></div>
+	<div id="Diceroll" >
+		<div id='die1' style="width: 39%; height: 18%; margin-left: 10%; float: left;"></div>
+		<div id='die2' style="width: 39%; height: 18%; margin-left: 51%;"></div>
+		<div style='clear: left; width: 100%; margin-top: 20%;' id = "dicerollbutton">
 			<a href="javascript:void(0)" onClick='animateRoll()' style="margin-left:9%;"><img src="<?php echo SITE_URL ?>/images/rolldice.jpg" height='60' width='220'/></a>
 		</div>
 	</div>

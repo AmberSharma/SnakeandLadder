@@ -9,7 +9,7 @@ $(document).ready(function()
 			if($_REQUEST['method'] == "Automatic")
 			{
 	?>
-			window.location.href= "automatic.php?name="+<?php echo "'".$_REQUEST['name']."'";?>+"&turn="+<?php echo "'" .$_REQUEST['turn']."'";?>+"&avatar="+<?php echo "'" .$_REQUEST['avatar']."'" ;?>+"&opponent="+<?php echo $_REQUEST['opponent'] ; ?>+"&method="+<?php echo "'" .$_REQUEST['method']."'" ;?>;
+			window.location.href= "automatic.php?name="+<?php echo "'".$_REQUEST['name']."'";?>+"&turn="+<?php echo "'" .$_REQUEST['turn']."'";?>+"&avatar="+<?php echo "'" .$_REQUEST['avatar']."'" ;?>+"&opponent="+<?php echo $_REQUEST['opponent'] ; ?>+"&method="+<?php echo "'" .$_REQUEST['method']."'" ;?>+"&dicecount="+<?php echo "'" .$_REQUEST['avatar']."'" ;?>;
 	<?php
 			}
 			else if($_REQUEST['method'] == "Manual")

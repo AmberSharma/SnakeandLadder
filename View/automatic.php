@@ -1,104 +1,9 @@
 <?php require_once "/var/www/SnakeandLadder/trunk/libraries/constant.php"; ?>
 <script src="<?php echo SITE_URL;?>/js/jquery.tools.min.js"></script>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<link rel="stylesheet" href="<?php echo SITE_URL; ?>/css/automatic.css">
 <html>
 <head>
 <title>Snake and ladder</title>
-<style type='text/css'>
-
-table td {
-	height: 10%;
-	width: 10%;
-}
-
-#roll {
-	clear: left;
-	float: left;
-	width: 520px;
-	height: 24pt;
-	margin: 40px 0 0 0;
-	font-size: 18pt;
-	font-weight: bold;
-	border-style: outset;
-	background: white;
-}
-
-.snakeandladder {
-	background-image: url(<?php echo SITE_URL;?>/images/snakeandladder.jpg);
-	background-position: center;
-	background-size: 102% 102%;
-	background-repeat: no-repeat;
-}
-
-.container {
-	background-image: url(<?php echo SITE_URL;?>/images/rolldicelogo.gif);
-	background-repeat: no-repeat;
-	background-size: 100% 100%;
-}
-
-.bubble {
-	background-color: #FFAB00;
-	border: 2px solid #333;
-	border-radius: 5px;
-	color: #333;
-	display: inline-block;
-	font: 16px/24px sans-serif;
-	padding: 12px 24px;
-	position: relative;
-}
-
-.bubble:after,.bubble:before {
-	border-left: 20px solid transparent;
-	border-right: 20px solid transparent;
-	border-top: 20px solid #FFAB00;
-	bottom: -20px;
-	content: '';
-	left: 50%;
-	margin-left: -20px;
-	position: absolute;
-}
-
-/* Styling for second triangle (border) */
-.bubble:before {
-	border-left: 23px solid transparent;
-	border-right: 23px solid transparent;
-	border-top: 23px solid;
-	border-top-color: inherit;
-	/* Can't be included in the shorthand to work */
-	bottom: -23px;
-	margin-left: -23px;
-}
-
-#left
-{
-	height:100%;
-	width:20%;
-	float:left;
-	
-}
-#center
-{
-	height:100%;
-	width:59%;
-	float:left;
-}
-#right
-{
-	height:100%;
-	width:21%;
-	float:right;
-	background-image: url(<?php echo SITE_URL;?>/images/messagebox.jpg);
-	background-position: center;
-	background-size: 100% 100%;
-	background-repeat: no-repeat;
-}	
-
-#message
-{
-	width:80%;
-	margin-top:80%;
-}
-</style>
 <script>
 var name = new Array() ;
 var userpositions = new Array("0") ;
@@ -114,6 +19,7 @@ var turn;
 var avatar;
 var opponent;
 var method;
+var dicecount;
 var message1 = "Ok Let's Start the Game!!!";
 var message2 = "Waiting for Compatible Opponents to turn Up!!!";
 var message3 = "Please Roll The dice Again!!!";
@@ -135,6 +41,7 @@ $(document).ready(function()
 			turn = <?php echo "'" .$_REQUEST['turn']."'";?>;
 			avatar = <?php echo "'" .$_REQUEST['avatar']."'" ;?>;
 			opponent = <?php echo $_REQUEST['opponent'] ; ?>;
+			dicecount = <?php echo $_REQUEST['dicecount'] ; ?>;
 			method = <?php echo "'" . $_REQUEST['method'] . "'" ; ?>;
 			$.ajax
 			({
@@ -301,9 +208,6 @@ function getPosition()
 						{
 							if (confirm(message8)) 
 							{
-								clearInterval(Timer2);
-								clearInterval(Timer3);
-								clearTimer(Timer4);
 								window.location.href= "bendrules.php?name="+user;
 							}
 						}
@@ -351,12 +255,12 @@ var last;
      {
         times = times || 1;
         
-        var roll = generateRoll();
-        drawRoll(roll[0], roll[1]);
+        var roll = generateRoll(dicecount);
+        drawRoll(roll);
          
          if (times > 10)
          {
-		var sum = checkRoll(roll[0], roll[1]);
+		var sum = checkRoll(roll);
 		if(turn == 'Yes')
 		{
 			if(sum == 6)
@@ -364,7 +268,7 @@ var last;
 				firstturn += sum ; 
 				$("#message").fadeIn();
 				$("#message").html("<span class='bubble'>" + message3 + " </span>");
-				$("#message").fadeOut();
+				$("#message").fadeOut(8000);
 				return ; 
 			}
 			else
@@ -433,18 +337,7 @@ var last;
 					$("#message").fadeOut(8000);
 					
 				}
-				if(pos >= 100)
-				{
-					if (confirm(message7)) 
-					{
-						clearInterval(Timer2);
-						clearInterval(Timer3);
-						clearTimer(Timer4);
-						window.location.href="bendrules.php?name="+user;
-					}
-					
-					
-				}
+				
 				firstturn = 0;
 				return;
 			}
@@ -499,16 +392,6 @@ var last;
 				$("#message").html("<span class='bubble'>Please Move " + sum + " positions Forward </span>");
 				$("#message").fadeOut(8000);
 				
-			}
-			if(pos >= 100)
-			{
-				if (confirm(message7)) 
-				{
-					clearInterval(Timer2);
-					clearInterval(Timer3);
-					clearTimer(Timer4);
-					window.location.href= "bendrules.php?name="+user;
-				}
 			}
 			return;
 		}
@@ -587,11 +470,12 @@ function func1(pos)
 	else
 	{
 		last = snake[printed -  1] ;
+		alert(last);
 		$.ajax
 		({
 			
 			type: "POST",
-			url: '../controller/controller.php?method=updateUserPosition&users='+name+"&user="+user+"&pos="+snake[printed -  1],				
+			url: '../controller/controller.php?method=updateUserPosition&users='+name+"&user="+user+"&pos="+last,				
 			success:function(data)
 			{
 				if($.trim(data) == 1)
@@ -603,6 +487,13 @@ function func1(pos)
 			}				
 		});
 		setChance();
+		if(last >= 100)
+		{
+			if (confirm(message7)) 
+			{
+				window.location.href="bendrules.php?name="+user;
+			}
+		}
 		printed = 0;
 	}
 }
@@ -620,10 +511,11 @@ function func2(pos)
 	else
 	{
 		last = ladder[printed - 1] ; 
+		alert(last);
 		$.ajax
 			({
 				type: "POST",
-				url: '../controller/controller.php?method=updateUserPosition&users='+name+"&user="+user+"&pos="+ladder[printed - 1],				
+				url: '../controller/controller.php?method=updateUserPosition&users='+name+"&user="+user+"&pos="+last,				
 				success:function(data)
 				{
 					if($.trim(data) == "1")
@@ -635,24 +527,46 @@ function func2(pos)
 				}				
 			});
 			setChance();
+			if(last >= 100)
+			{
+				if (confirm(message7)) 
+				{
+					window.location.href="bendrules.php?name="+user;
+				}
+			}
 			printed = 0;
 	}
 	
 }
-     function generateRoll()
+     function generateRoll(dice)
      {
-         return [ Math.floor(Math.random()*6) + 1, Math.floor(Math.random()*6) + 1 ];
+	var arr = new Array();
+         <!-- return [ Math.floor(Math.random()*6) + 1, Math.floor(Math.random()*6) + 1 ]; -->
+	for(var i = 0 ; i < dice ; i ++)
+	{
+		arr[i] = Math.floor(Math.random()*6) + 1 ; 
+	}	
+	return arr;
      }
 
-     function drawRoll(die1, die2)
+     function drawRoll(die)
      {
-         document.getElementById('die1').innerHTML = '<img src="<?php echo SITE_URL;?>/images/Dice_' + die1 +'.png" />';
-         document.getElementById('die2').innerHTML = '<img src="<?php echo SITE_URL;?>/images/Dice_' + die2 +'.png" />';
+	for(var i = 0 ; i < die.length ; i ++)
+	{
+		var j = i + 1;
+		document.getElementById('die'+(j)).innerHTML = '<img src="<?php echo SITE_URL;?>/images/Dice_' + die[i] +'.png" />';
+	}
+         
+         <!-- document.getElementById('die2').innerHTML = '<img src="<?php echo SITE_URL;?>/images/Dice_' + die2 +'.png" />'; -->
      }
 
-     function checkRoll(die1, die2)
+     function checkRoll(die)
      {
-         var sum = die1 + die2;
+	var sum = 0;
+	for(var i = 0 ; i < die.length ; i ++)
+	{
+		sum += 	die[i];
+	}
          return sum;
      }  
           

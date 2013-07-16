@@ -1,5 +1,6 @@
 <?php require_once "/var/www/SnakeandLadder/trunk/libraries/constant.php"; ?>
 <script src="<?php echo SITE_URL;?>/js/jquery.tools.min.js"></script>
+<link rel="stylesheet" href="<?php echo SITE_URL; ?>/css/bendrules.css">
 <html>
 <head>
 <script>
@@ -31,98 +32,6 @@ $("#sleft").click(function(){
 });
 });
 </script>
-
-<style>
-label
-{
-	color:#FFFFFF;
-	font-size:11px;
-	font-family: "Courier New", Courier, mono;
-font-style: normal;
-font-weight: 700;
-}
-table td
-{
-color:#FFFFFF;
-font-size:11px;
-font-family: "Courier New", Courier, mono;
-font-style: normal;
-font-weight: 700;
-}
-.total
-{
-height:30%;
-width:60%;
-margin-left:15%;
-margin-right:auto;
-}
-.slidepanel
-{
-width:60%;
-height:100%;
-overflow-x: hidden;
-overflow-y: hidden;
-border:1px solid blue;
-}
-.box-wrapper 
-{
-width: 400%;
-height: 100%;
-overflow: hidden;
-
-}
-
-.block
-{
-width:24.9%;
-height:90%;
-float:left;
-position:relative;
-left:0px;
-}
-a
-{
-text-decoration:none;
-}
-table
-{
-margin-top:1%;
-margin-left:30%;
-width:400px;
-height:50px;
-
-}
-
-
-#container
-{
-	border:1px solid green;
-	background-image:url(<?php echo SITE_URL .'/images/bg.jpg' ?>);
-	background-repeat:no-repeat;
-	background-color: transparent;
-  	box-shadow: 40px 40px 100px 40px #000;
-	margin-top:10%;
-	margin-left:25%;
-	height:475px;
-	width:670px;
-	-webkit-background-size: cover;
-    	-moz-background-size: cover;
-    	-o-background-size: cover;
-    	background-size: cover;
-}
-html { 
-    background: url(<?php echo SITE_URL .'/images/backgroundimage.jpg' ?>) no-repeat center center fixed #000; 
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-}
-center
-{
-	border:1px solid blue;
-}
-</style>
-
 </head>
 <body>
 <?php
@@ -175,6 +84,16 @@ function deleteuser()
 					<label>Method of the Player Move!</label><br />
 					<input type="radio" name="method" value="Automatic">Automatic</input>
 					<input type="radio" name="method" value="Manual">Manual</input>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>Number Of Dice</label><br />
+					<select  name="dicecount">
+					    <option  value="-1" selected=selected>---Choose---</option>
+					    <option  value="1">1</option>
+					    <option  value="2">2</option>
+					</select>
 				</td>
 			</tr>
 			

@@ -192,10 +192,12 @@ class Register extends model {
 		$this->db->Where (array("name" => $_SESSION['user']));
 		$this->db->Select ();
 		$result = $this->db->resultArray();
+		
 		$this->db->Fields (array("position" , "name" , "avatar"));
 		$this->db->From ( "user where name != '" . $this->getUser () ."'  and playing = '" . $result[0]['playing'] . "'");
 		$this->db->Select ();
 		$result1 = $this->db->resultArray();
+		
 		return $result1;
 		
 	}

@@ -1,0 +1,78 @@
+.simple_overlay {
+ 
+    /* must be initially hidden */
+    display:none;
+ 
+    /* place overlay on top of other elements */
+    z-index:10000;
+ 
+    /* styling */
+    background-color:#333;
+ 
+    min-width:200px;
+    min-height:200px;
+    border:1px solid #666;
+ 
+    /* CSS3 styling for latest browsers */
+    -moz-box-shadow:0 0 90px 5px #000;
+    -webkit-box-shadow: 0 0 90px #000;
+}
+ 
+/* close button positioned on upper right corner */
+.simple_overlay .close {
+    background-image:url(../images/close.png);
+    position:absolute;
+    right:-15px;
+    top:-15px;
+    cursor:pointer;
+    height:35px;
+    width:35px;
+}
+
+.details {
+  position:absolute;
+  left:15px;
+  top:5px;
+  font-size:11px;
+  color:#fff;
+  width:150px;
+  }
+ 
+  .details pre {
+  color:#FF5500;
+  font-size:12px;
+  }
+a
+{
+text-decoration:none;
+}
+table
+{
+margin-top:10px;
+margin-left:60%;
+width:500px;
+height:115px;
+}
+#container
+{
+	border:1px solid green;
+	background-image:url(../images/sandllogo.jpg);
+	background-repeat:no-repeat;
+	background-color: transparent;
+  	box-shadow: 40px 40px 100px 40px #000;
+	margin-top:10%;
+	margin-left:25%;
+	height:475px;
+	width:670px;
+	-webkit-background-size: cover;
+    	-moz-background-size: cover;
+    	-o-background-size: cover;
+    	background-size: cover;
+}
+html { 
+    background: url(../images/backgroundimage.jpg) no-repeat center center fixed #000; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}

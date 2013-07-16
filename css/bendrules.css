@@ -1,0 +1,88 @@
+label
+{
+	color:#FFFFFF;
+	font-size:11px;
+	font-family: "Courier New", Courier, mono;
+font-style: normal;
+font-weight: 700;
+}
+table td
+{
+color:#FFFFFF;
+font-size:11px;
+font-family: "Courier New", Courier, mono;
+font-style: normal;
+font-weight: 700;
+}
+.total
+{
+height:30%;
+width:60%;
+margin-left:15%;
+margin-right:auto;
+}
+.slidepanel
+{
+width:60%;
+height:100%;
+overflow-x: hidden;
+overflow-y: hidden;
+border:1px solid blue;
+}
+.box-wrapper 
+{
+width: 400%;
+height: 100%;
+overflow: hidden;
+
+}
+
+.block
+{
+width:24.9%;
+height:90%;
+float:left;
+position:relative;
+left:0px;
+}
+a
+{
+text-decoration:none;
+}
+table
+{
+margin-top:1%;
+margin-left:30%;
+width:400px;
+height:50px;
+
+}
+
+
+#container
+{
+	border:1px solid green;
+	background-image:url(../images/bg.jpg);
+	background-repeat:no-repeat;
+	background-color: transparent;
+  	box-shadow: 40px 40px 100px 40px #000;
+	margin-top:10%;
+	margin-left:25%;
+	height:475px;
+	width:670px;
+	-webkit-background-size: cover;
+    	-moz-background-size: cover;
+    	-o-background-size: cover;
+    	background-size: cover;
+}
+html { 
+    background: url(../images/backgroundimage.jpg) no-repeat center center fixed #000; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+center
+{
+	border:1px solid blue;
+}
