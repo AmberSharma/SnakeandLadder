@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.29, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.1.67, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: snakeandladder
 -- ------------------------------------------------------
--- Server version	5.5.29-0ubuntu0.12.04.1-log
+-- Server version	5.1.67-0ubuntu0.11.10.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -26,13 +26,14 @@ CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(30) DEFAULT NULL,
   `turn` char(3) DEFAULT NULL,
-  `kickback` char(3) DEFAULT NULL,
   `avatar` varchar(30) DEFAULT NULL,
+  `method` varchar(30) DEFAULT NULL,
   `playing` int(11) DEFAULT NULL,
   `chance` char(1) DEFAULT NULL,
   `position` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=159 DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=MyISAM AUTO_INCREMENT=873 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +42,6 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (156,'Amber','Yes','Yes','avatar2.png',90,'N',5),(157,'Debanshu','Yes','Yes','avatar3.png',90,'Y',5),(158,'Amber','Yes','Yes','avatar2.png',0,'N',5);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-06-26 16:57:46
+-- Dump completed on 2013-07-17  0:16:19
