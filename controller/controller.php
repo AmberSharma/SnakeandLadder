@@ -9,47 +9,7 @@ $route = array();
 
 class MyClass 
 {
-	public function handleLogin() 
-	{
-//echo "hrflkjs";die;
-
-        
-        /* Validate username password */
-		$obj = new validate();
-		$obj->validator("username",$_POST ["username"], 'required#username#maxlength=25','Username Required# Username is not valid#Username should not be more than 25 chracter long');
-		$obj->validator("password",$_POST ["password"], 'required#minlength=5#maxlength=25','Password Required#Password should not be less than 5 characters long#Password should not be more than 25 chracter long');
-        //$authObject->validateLogin ();
-    		$error=$obj->result();
-		//print_r($error);
-		if(!empty($error['username']))
-		{			
-			header("Location:../View/comment.php?user=".$error['username']);
-		}
-		else if(!empty($error['password']))
-		{
-			header("Location:../View/comment.php?password=".$error['password']);
-		}
-		else
-		{
-			require_once SITE_PATH.'/../model/gettersettermodel.php';
-        		/* Getting rid of sql injection */
-			$objInitiateUser = new Register ();
-			$objInitiateUser->setUsername($_POST['username']);
-			$objInitiateUser->setPassword($_POST['password']);
-        		
-        	$a=$objInitiateUser->login () ;
-        	if ($a == 1) 
-			{
-				$b=$objInitiateUser->updateLogged () ;
-				//print_r($a);die;
-            	$this->showUserPanel();
-        	}
-        	else 
-			{
-            	require_once(SITE_PATH);
-        	}
-		}
-    }
+	
     
     /* -----------------------------------------------------
          Function to add FAQ called from faq.php
@@ -79,6 +39,22 @@ class MyClass
 		$objInitiateUser->setUser($_REQUEST['user']);
 		$b=$objInitiateUser->deleteUser() ;
 		
+	}
+
+	public function uniqueUser ()
+	{
+		require_once SITE_PATH.'/../model/gettersettermodel.php';
+		$objInitiateUser = new Register ();
+		$objInitiateUser->setUser($_REQUEST['user']);
+		$b=$objInitiateUser->uniqueUser() ;
+		if(count($b) > 0)
+		{
+			echo  "0";
+		}
+		else
+		{
+			echo "1";
+		}
 	}
 	
 	public function fetchPlayingUser ()
@@ -121,6 +97,7 @@ class MyClass
 		$objInitiateUser->setTurn($_REQUEST['turn']);
 		$objInitiateUser->setAvatar($_REQUEST['avatar']);
 		$objInitiateUser->setMethod($_REQUEST['method1']);
+		$objInitiateUser->setDice($_REQUEST['dice']);
 		$b = $objInitiateUser->insertUser () ;
 		if($b)
 		{
@@ -141,6 +118,7 @@ class MyClass
 		$objInitiateUser->setTurn($_REQUEST['turn']);
 		$objInitiateUser->setAvatar($_REQUEST['avatar']);
 		$objInitiateUser->setMethod($_REQUEST['method1']);
+		$objInitiateUser->setDice($_REQUEST['dice']);
 		$b = $objInitiateUser->fetchUser () ;
 		if($b)
 		{

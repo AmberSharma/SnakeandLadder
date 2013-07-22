@@ -17,14 +17,14 @@ font-weight: 700;
 .total
 {
 height:30%;
-width:60%;
+min-width:100px;
 margin-left:15%;
 margin-right:auto;
 }
 .slidepanel
 {
-width:60%;
-height:100%;
+width:350px;
+height:80%;
 overflow-x: hidden;
 overflow-y: hidden;
 border:1px solid blue;
@@ -39,10 +39,11 @@ overflow: hidden;
 
 .block
 {
-width:24.9%;
+width:70px;
 height:90%;
 float:left;
 position:relative;
+border:1px solid red;
 left:0px;
 }
 a
@@ -74,6 +75,16 @@ height:50px;
     	-moz-background-size: cover;
     	-o-background-size: cover;
     	background-size: cover;
+}
+#sleft
+{
+	font-size : 30px;
+	color:yellow;
+}
+#sright
+{
+	font-size : 30px;
+	color:yellow;
 }
 html { 
     background: url(../images/backgroundimage.jpg) no-repeat center center fixed #000; 

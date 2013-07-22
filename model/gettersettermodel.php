@@ -7,6 +7,7 @@ class Register extends model {
 	protected $avatar;
 	protected $turn;
 	protected $method;
+	protected $dice;
 	
 	/**
 	 * @return the $random1
@@ -21,9 +22,21 @@ class Register extends model {
 	/**
 	 * @param field_type $random1
 	 */
+	public function setDice($dice) {
+		$this->dice = $dice;
+	}
+
+	public function getDice() {
+		return $this->dice;
+	}
+
+	/**
+	 * @param field_type $random1
+	 */
 	public function setMethod($method) {
 		$this->method = $method;
 	}
+
 
 	/**
 	 *
@@ -69,7 +82,7 @@ class Register extends model {
 	
 	
 	public function insertUser() {
-		$this->db->Fields ( array ("name" =>  $this->getUser () ,"turn" => $this->getTurn ()  ,"avatar" => $this->getAvatar () , "playing" => "N" , "chance" => "N" , "position" => "-1" , "method" => $this->getMethod ()));
+		$this->db->Fields ( array ("name" =>  $this->getUser () ,"turn" => $this->getTurn ()  ,"avatar" => $this->getAvatar () , "playing" => "N" , "chance" => "N" , "position" => "-1" , "method" => $this->getMethod () , "dice" =>  $this->getDice ()));
 		$this->db->From ( "user" );
 		$result = $this->db->Insert ();
 		return $result;
@@ -80,6 +93,7 @@ class Register extends model {
 		$this->db->From ( "user");
 		$this->db->Where (array("name" => $this->getUser ()));
 		$this->db->Select ();
+		//echo $this->db->lastQuery();
 		$result = $this->db->resultArray();
 		$_SESSION['user'] = $this->getUser ();
 		
@@ -87,16 +101,18 @@ class Register extends model {
 		{
 			$_SESSION['play'] = $result[0]['playing'] ;
 			$this->db->Fields (array("avatar" , "name"));
-			$this->db->From ("user where playing =  ". $result[0]['playing'] ." and name != '".$this->getUser () . "'");
+			$this->db->From ("user where playing =  ". $result[0]['playing'] ." and name != '".$this->getUser () . "' and dice = ".$this-> getDice());
 			$this->db->Select ();
 			$result = $this->db->resultArray();
+			//echo $this->db->lastQuery();
 			return $result;
 		}
 		else
 		{
 			$this->db->Fields (array("avatar" , "name"));
-			$this->db->From ( "user where name != '".$this->getUser (). "' and turn = '".$this->getTurn ()."' and  avatar != '".$this->getAvatar () ."' and playing = '0' and chance = 'N' and method = '". $this->getMethod () . "'");
+			$this->db->From ( "user where name != '".$this->getUser (). "' and turn = '".$this->getTurn ()."' and  avatar != '".$this->getAvatar () ."' and playing = '0' and chance = 'N' and method = '". $this->getMethod () . "' and dice = ".$this-> getDice());
 			$this->db->Select ();
+			//echo $this->db->lastQuery();
 			$result = $this->db->resultArray();
 			return $result;
 		}
@@ -209,6 +225,16 @@ class Register extends model {
 		$this->db->Delete ();		
 		echo $this->db->lastQuery(); 
 	}
+	
+	public function uniqueUser() 
+	{
+		$this->db->Fields (array("name"));
+		$this->db->From ("user");
+		$this->db->Where (array("name" => $this->getUser()));
+		$this->db->Select ();
+		$result = $this->db->resultArray();		
+		return $result;
+	}
 
 	public function setChance($users) 
 	{
@@ -218,7 +244,7 @@ class Register extends model {
 			$this->db->Fields (array("chance" , "name"));
 			$this->db->From ( "user" );
 			$this->db->Where (array("name" => $users[$i]));
-			$result = $this->db->Select ();
+			$this->db->Select ();
 			$result = $this->db->resultArray();
 			if($result[0]['chance'] == "Y")
 			{
@@ -231,6 +257,7 @@ class Register extends model {
 			$this->db->From ( "user" );
 			$this->db->Where (array("name" => $users[0]));
 			$this->db->Update ();
+			
 		}		
 	}
 
