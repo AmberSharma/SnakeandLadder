@@ -28,33 +28,33 @@
 </table>
 </div>
 <div class="simple_overlay" id="mies1">
-<img src="images/therules.jpg" width='400' height='500'/>
+<img src="images/therules.jpg" width='420' height='500'/>
 <div class="details">
 <pre>
 <br />
 <br />
 <br />
-Step 1: The chits are thrown and all 4 people have
-to pick one chit each.
-Lets say the 4 people are A,B,C,D.
-All 4 pick up one chit each. 
-Step 2: They have to keep it secret that which chit
-they picked.
-Assume:
-A picks Raja
-B picks Mantri
-C picks Sipahi
-D picks chor
-Step 3: A says mera mantra kaun? 
-Step 4: B says Mein sarkar 
-Step 5: A says chor sipahi ka pata lagao 
-Step 6: At this point,
-B has to guess who between C and D is chor and who
-is sipahi by doing some sort of face reading but mainly
-its all guess and luck work.
-Step 7: Lets say B guesses it wrong.
-Step 8: In this case the thief gets 500 points and 
-assistant (mantri) will get 0 points.
+<b>Step 1:</b> The aim of the game is to be the first player
+to reach the end by moving across the board from square
+1 to square 100.
+
+<b>Step 2:</b> The game can be played in two ways either manual
+or automatic player move.
+
+<b>Step 3:</b> Each subsequent player must throw a dice to move
+the player on his/her turn.
+
+<b>Step 4:</b> If a player lands at the tip of the snake's head,
+his or her marker slides down to the square at the snake's
+tail.
+ 
+<b>Step 5:</b> If a player lands on a square that is at the base
+of a ladder, his or her marker moves to the square at the
+top of the ladder and continues from there.
+ 
+<b>Step 6:</b> Once any player reaches the top the game.
+              
+		The Game Ends!!!.
 </pre>
   </div>
 </div>

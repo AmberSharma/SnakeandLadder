@@ -1,6 +1,5 @@
 <?php
 require_once getcwd()."/../libraries/constant.php";
-//echo SITE_URL;die;
 require_once getcwd().'/../libraries/validate.php';
 
 ini_set("display_errors", "1");
@@ -11,27 +10,12 @@ class MyClass
 {
 	
     
-    /* -----------------------------------------------------
-         Function to add FAQ called from faq.php
-       -----------------------------------------------------
-    */
-    public function loggedinCount ()
-	{	
-			
-		require_once SITE_PATH.'/../model/gettersettermodel.php';
-		$objInitiateUser = new Register ();
-		$b=$objInitiateUser->loggedinCount () ;
-		print_r($b);
-		
-	}
-	
-	public function assignUserspace ()
-	{
-		require_once SITE_PATH.'/../model/gettersettermodel.php';
-		$objInitiateUser = new Register ();
-		$b=$objInitiateUser->assignUserSpace () ;
-	}
-
+/* 
+   -----------------------------------------------------------------------------------------------------------------------------------------
+         Function to delete user when the game finishes. It is called automatically when the any of the user either looses of wins the game
+   -----------------------------------------------------------------------------------------------------------------------------------------
+*/
+    
 	public function deleteUser ()
 	{
 		require_once SITE_PATH.'/../model/gettersettermodel.php';
@@ -40,6 +24,12 @@ class MyClass
 		$b=$objInitiateUser->deleteUser() ;
 		
 	}
+
+/* 
+   --------------------------------------------------------------------------------------------------------------
+         Function to find whether user is unique or not. It is called from bendrules.php page on every key press.
+   --------------------------------------------------------------------------------------------------------------
+*/
 
 	public function uniqueUser ()
 	{
@@ -57,38 +47,12 @@ class MyClass
 		}
 	}
 	
-	public function fetchPlayingUser ()
-	{
-		require_once SITE_PATH.'/../model/gettersettermodel.php';
-		$objInitiateUser = new Register ();
-		$b=$objInitiateUser->fetchPlayingUser () ;
-		
-		if(count($b) == 4)
-		$objInitiateUser->userScoreTable () ;
-		require_once SITE_PATH.'/../View/try.php';
-		
-		
-	}
+/* 
+   ---------------------------------------------------------------------------------------------------------------------------
+         Function to insert new User into the database. It is called from either automatic.php or manual.php page on page load.
+   ---------------------------------------------------------------------------------------------------------------------------
+*/	
 	
-	public function turnRandom ()
-	{
-		require_once SITE_PATH.'/../model/gettersettermodel.php';
-		$objInitiateUser = new Register ();
-		$objInitiateUser->setRandom1($_REQUEST['r1']);
-		$objInitiateUser->turnRandom () ;
-		
-	}
-	
-	
-	
-	public function fetchturnRandom ()
-	{
-		require_once SITE_PATH.'/../model/gettersettermodel.php';
-		$objInitiateUser = new Register ();
-		$b = $objInitiateUser->fetchturnRandom () ;
-	
-	}
-
 	public function insertUser ()
 	{
 		require_once SITE_PATH.'/../model/gettersettermodel.php';
@@ -109,6 +73,13 @@ class MyClass
 		}
 	
 	}
+
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function to fetch required number of opponents for a user. 
+	 It is called from either automatic.php or manual.php at regular interval until the required number of opponents are available.
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
 
 	public function fetchUser ()
 	{
@@ -142,6 +113,14 @@ class MyClass
 		}
 	
 	}
+
+
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function to assign a random number to a fetch group of users. 
+	 It is called from either automatic.php or manual.php page after the required number of opponents are available and finalized.
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
 	
 	public function updateUser ()
 	{
@@ -151,6 +130,13 @@ class MyClass
 		$b = $objInitiateUser->updateUser ($abc) ;
 		die($b);
 	}
+
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function to update user positions at regular interval. 
+	 It is called from either automatic.php or manual.php at session user finishes his/her turn.
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
 	public function updateUserPosition ()
 	{
 		require_once SITE_PATH.'/../model/gettersettermodel.php';
@@ -159,6 +145,13 @@ class MyClass
 		$b = $objInitiateUser->updateUserPosition ($abc ,  $_REQUEST['user'] , $_REQUEST['pos']) ;
 		die($b);
 	}
+
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function to fetch the user who is having the turn to roll the dice.
+	 It is called from either automatic.php or manual.php page at regular interval.
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
 	
 	public function getChance ()
 	{
@@ -175,6 +168,13 @@ class MyClass
 		}
 	
 	}
+
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function to fetch the positions of all the opponents. 
+	 It is called from either automatic.php or manual.php page at a regular time interval.
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
 
 	public function getPosition ()
 	{
@@ -199,6 +199,12 @@ class MyClass
 	
 	}
 
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function to set the turn for the first time to start the game. 
+	 It is called from either automatic.php or manual.php page once the required opponents are available.
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
 	public function setChance ()
 	{
 		require_once SITE_PATH.'/../model/gettersettermodel.php';
@@ -206,22 +212,7 @@ class MyClass
 		$abc = explode("," , $_REQUEST['users']);
 		$objInitiateUser->setChance ($abc) ;	
 	}
-	public function logout ()
-	{	
-		require_once SITE_PATH.'/../model/gettersettermodel.php';
-		$objInitiateUser = new Register ();
-		$b=$objInitiateUser->logOut () ;
-		if($b == "1")
-		{
-			header("Location:".SITE_URL);
-		}
-	}
 	
-	public function showUserPanel ()
-	{
-		
-		require_once("../View/playgame.php");
-	}
 	
 
 

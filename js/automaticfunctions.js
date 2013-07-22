@@ -35,6 +35,14 @@ var laddertail = new Array(1,4,9,21,28,51,71,80 );
 var ladderface = new Array(38,14,31,42,84,67,91,100);
 var ladderpath = {1:[19,22,38], 4:[5,15,14], 9:[12,30,31], 21:[39,42], 28:[34,47,55,65,76,84], 51:[52,68,67], 71:[90,91], 80:[81,100]};
 var last;
+
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function to assign a random number to a fetch group of users. 
+	 It is called from either automatic.php or manual.php page after the required number of opponents are available and finalized.
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
+
 function fetchUser()
 {
 	$.ajax
@@ -119,6 +127,13 @@ function fetchUser()
 			});
 }
 
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function to fetch the user who is having the turn to roll the dice.
+	 It is called from either automatic.php or manual.php page at regular interval.
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
+
 function getChance()
 {
 	$.ajax
@@ -162,6 +177,13 @@ function getChance()
 		
 	});
 }
+
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function to fetch the positions of all the opponents. 
+	 It is called from either automatic.php or manual.php page at a regular time interval.
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
 
 function getPosition()
 {
@@ -216,6 +238,14 @@ function getPosition()
 		
 	});
 }
+
+
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function to set the turn for the first time to start the game. 
+	 It is called from either automatic.php or manual.php page once the required opponents are available.
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
 function setChance()
 {
 	$.ajax
@@ -224,6 +254,16 @@ function setChance()
 		url: '../controller/controller.php?method=setChance&users='+name,				
 	});
 }
+
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function call on roll dice anchor tag click. 
+	 It is called 11 times with a counter increment each time.
+	 Each time it calls another function generateroll which randomly fetches the dice generating a random number each time.
+	 All the calculation about the game are performed in this function.
+	 It assigns a position upto which a player has to move automatically.  
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
 
 function animateRoll(times)
      {
@@ -441,6 +481,13 @@ function animateRoll(times)
          setTimeout('animateRoll(' + (times + 1) + ')', 200);
      }
 
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function to move the player one position at a time untill the final position is reached.  
+	 It hide the player at previous position every time it moves forward. 
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
+
 function func(attempt)
 {
 	if(attempt <= last)
@@ -504,6 +551,11 @@ function func(attempt)
 	}
 }
 
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function to move player through the snake path from head to tail.
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
 function func1(pos)
 {
 	snake = snakepath[pos];
@@ -545,6 +597,12 @@ function func1(pos)
 		printed = 0;
 	}
 }
+
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function to move player through the ladder path from tail to head.
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
 function func2(pos)
 {
 	ladder = ladderpath[pos];
@@ -586,6 +644,13 @@ function func2(pos)
 	}
 	
 }
+
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function to generate random number for the specified number of dice.. 
+	 It returns an array for counting to the number of dices. 
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
      function generateRoll(dice)
      {
 	var arr = new Array();
@@ -596,6 +661,13 @@ function func2(pos)
 	}	
 	return arr;
      }
+
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function to show the dice image for each random number. 
+	 It show the specified dice image for every array index.
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
 
      function drawRoll(die)
      {
@@ -608,6 +680,12 @@ function func2(pos)
          <!-- document.getElementById('die2').innerHTML = '<img src="../images/Dice_' + die2 +'.png" />'; -->
      }
 
+
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function to calculate the sum of all the dices. 
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
      function checkRoll(die)
      {
 	var sum = 0;

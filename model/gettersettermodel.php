@@ -77,9 +77,11 @@ class Register extends model {
 	}
 	
 	
-	
-	
-	
+/* 
+   ---------------------------------------------------------------------------------------------------------------------------
+         Function to insert new User into the database. It is called from either automatic.php or manual.php page on page load.
+   ---------------------------------------------------------------------------------------------------------------------------
+*/	
 	
 	public function insertUser() {
 		$this->db->Fields ( array ("name" =>  $this->getUser () ,"turn" => $this->getTurn ()  ,"avatar" => $this->getAvatar () , "playing" => "N" , "chance" => "N" , "position" => "-1" , "method" => $this->getMethod () , "dice" =>  $this->getDice ()));
@@ -87,6 +89,13 @@ class Register extends model {
 		$result = $this->db->Insert ();
 		return $result;
 	}
+
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function to fetch required number of opponents for a user. 
+	 It is called from either automatic.php or manual.php at regular interval until the required number of opponents are available.
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
 
 	public function fetchUser() {
 		$this->db->Fields (array("playing"));
@@ -117,6 +126,13 @@ class Register extends model {
 			return $result;
 		}
 	}
+
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function to assign a random number to a fetch group of users. 
+	 It is called from either automatic.php or manual.php page after the required number of opponents are available and finalized.
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
 	public function updateUser($users) 
 	{
 		$this->db->Fields (array("playing"));
@@ -142,6 +158,13 @@ class Register extends model {
 			return "-1";
 		
 	}
+
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function to update user positions at regular interval. 
+	 It is called from either automatic.php or manual.php at session user finishes his/her turn.
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
 
 	public function updateUserPosition($users , $user , $pos) 
 	{
@@ -187,6 +210,13 @@ class Register extends model {
 		
 	}
 
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function to fetch the user who is having the turn to roll the dice.
+	 It is called from either automatic.php or manual.php page at regular interval.
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
+
 	public function getChance() 
 	{
 		
@@ -200,6 +230,13 @@ class Register extends model {
 		return $result1;
 		
 	}
+
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function to fetch the positions of all the opponents. 
+	 It is called from either automatic.php or manual.php page at a regular time interval.
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
 
 	public function getPosition() 
 	{
@@ -218,6 +255,12 @@ class Register extends model {
 		
 	}
 
+/* 
+   -----------------------------------------------------------------------------------------------------------------------------------------
+         Function to delete user when the game finishes. It is called automatically when the any of the user either looses of wins the game
+   -----------------------------------------------------------------------------------------------------------------------------------------
+*/
+
 	public function deleteUser() 
 	{
 		$this->db->From ( "user");
@@ -226,6 +269,12 @@ class Register extends model {
 		echo $this->db->lastQuery(); 
 	}
 	
+
+/* 
+   --------------------------------------------------------------------------------------------------------------
+         Function to find whether user is unique or not. It is called from bendrules.php page on every key press.
+   --------------------------------------------------------------------------------------------------------------
+*/
 	public function uniqueUser() 
 	{
 		$this->db->Fields (array("name"));
@@ -235,6 +284,13 @@ class Register extends model {
 		$result = $this->db->resultArray();		
 		return $result;
 	}
+
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function to set the turn for the first time to start the game. 
+	 It is called from either automatic.php or manual.php page once the required opponents are available.
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
 
 	public function setChance($users) 
 	{
@@ -262,62 +318,7 @@ class Register extends model {
 	}
 
 	
-
-
-	public function logOut() {
-		$this->db->Fields ( array (
-				"loggedin" => "N" , "playing"=>"N"
-		) );
-		$this->db->From ( "user" );
-		$this->db->Where ( array (
-				"username" => $_SESSION ['username'] 
-		) );
-		$result = $this->db->Update ();
-		if ($result == "1") {
-			session_destroy ();
-			return $result;
-		}
-	}
-	public function loggedinCount() {
-		$this->db->Fields ( array (
-				"username",
-				"id" 
-		) );
-		$this->db->From ( "user where loggedin='Y' and playing <> 'Y'");
-		$this ->db->Limit("4");
-		$this->db->Select ();
-		
-		$result = $this->db->resultArray ();
-		
-		
-		
-		return (count($result));
-	}
-
-	public function getnewMessage() {
-		$this->db->Fields ( array ("message","user") );
-		$this->db->From ($_SESSION ['user1'][0].$_SESSION ['user2'][0].$_SESSION ['user3'][0].$_SESSION ['user4'][0]."message");
-		$this->db->Where ( array ("status" => "n" ));
-		$this->db->Select ();
-		//$this ->db->Limit("4");
-		$result = $this->db->resultArray ();
-		return ($result);
-	}
 	
-	public function fetchPlayingUser() {
-		$this->db->Fields ( array ("username") );
-		$this->db->From ("user");
-		$this->db->Where ( array ("loggedin" => "Y" , "playing" => "Y" ));
-		$this->db->Select ();
-		$this ->db->Limit("4");
-		$result = $this->db->resultArray ();
-		for($i =0 ; $i < count($result) ; $i ++)
-		{
-			$_SESSION["user".$this->j] = $result[$i]['username'];
-				$this->j ++;
-		}
-		return ($result);
-	}
 	
 }
 

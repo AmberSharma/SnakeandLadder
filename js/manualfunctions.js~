@@ -34,11 +34,19 @@ var laddertail = new Array(1,4,9,21,28,51,71,80 );
 var ladderface = new Array(38,14,31,42,84,67,91,100 );
 var dice2overhundred = 1;
 
-
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function call on roll dice anchor tag click. 
+	 It is called 11 times with a counter increment each time.
+	 Each time it calls another function generateroll which randomly fetches the dice generating a random number each time.
+	 All the calculation about the game are performed in this function.
+	 It assigns a droppable class to the position calculated after the dice is rolled for the final time. 
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
 function animateRoll(times)
 {
 	times = times || 1;
-         var roll = generateRoll(dicecount);
+        var roll = generateRoll(dicecount);
         drawRoll(roll);
         if (times > 10)
         {
@@ -336,6 +344,14 @@ function animateRoll(times)
 	setTimeout('animateRoll(' + (times + 1) + ')', 200);
 }
 
+
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function to generate random number for the specified number of dice.. 
+	 It returns an array for counting to the number of dices. 
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
+
 function generateRoll(dice)
 {
 var arr = new Array();
@@ -346,6 +362,13 @@ for(var i = 0 ; i < dice ; i ++)
 }	
 return arr;
 }
+
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function to show the dice image for each random number. 
+	 It show the specified dice image for every array index.
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
 
 function drawRoll(die)
 {
@@ -358,6 +381,12 @@ for(var i = 0 ; i < die.length ; i ++)
  <!-- document.getElementById('die2').innerHTML = '<img src="../images/Dice_' + die2 +'.png" />'; -->
 }
 
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function to calculate the sum of all the dices. 
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
+
 function checkRoll(die)
 {
 var sum = 0;
@@ -368,6 +397,12 @@ for(var i = 0 ; i < die.length ; i ++)
  return sum;
 }    
 
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function to assign a random number to a fetch group of users. 
+	 It is called from either automatic.php or manual.php page after the required number of opponents are available and finalized.
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
 
 function fetchUser()
 {
@@ -451,6 +486,14 @@ function fetchUser()
 	});
 }
 
+
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function to fetch the user who is having the turn to roll the dice.
+	 It is called from either automatic.php or manual.php page at regular interval.
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
+
 function getChance()
 {
 	$.ajax
@@ -494,6 +537,13 @@ function getChance()
 		
 	});
 }
+
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function to fetch the positions of all the opponents. 
+	 It is called from either automatic.php or manual.php page at a regular time interval.
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
 
 function getPosition()
 {
@@ -550,6 +600,14 @@ function getPosition()
 		
 	});
 }
+
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function to set the turn for the first time to start the game. 
+	 It is called from either automatic.php or manual.php page once the required opponents are available.
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
+
 function setChance()
 {
 	$.ajax
@@ -558,6 +616,16 @@ function setChance()
 		url: '../controller/controller.php?method=setChance&users='+name,				
 	});
 }
+
+
+/* 
+   ------------------------------------------------------------------------------------------------------------------------------------
+         Function to assign a random number to a fetch group of users. 
+	 It is called from either automatic.php or manual.php page after the required number of opponents are available and finalized.
+   ------------------------------------------------------------------------------------------------------------------------------------
+*/
+
+
 function updateUser()
 {
 	$.ajax
