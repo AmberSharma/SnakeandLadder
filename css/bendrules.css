@@ -13,10 +13,11 @@ font-size:11px;
 font-family: "Courier New", Courier, mono;
 font-style: normal;
 font-weight: 700;
+padding:10px;
 }
 .total
 {
-height:30%;
+height:25%;
 min-width:100px;
 margin-left:15%;
 margin-right:auto;
@@ -52,29 +53,25 @@ text-decoration:none;
 }
 table
 {
+margin:5px;
 margin-top:1%;
 margin-left:30%;
 width:400px;
 height:50px;
-
 }
 
 
 #container
 {
-	border:1px solid green;
-	background-image:url(../images/bg.jpg);
+	background-image:url('../images/bg.jpg');
 	background-repeat:no-repeat;
 	background-color: transparent;
+	background-size: 890px 700px;
   	box-shadow: 40px 40px 100px 40px #000;
-	margin-top:10%;
-	margin-left:25%;
-	height:475px;
-	width:670px;
-	-webkit-background-size: cover;
-    	-moz-background-size: cover;
-    	-o-background-size: cover;
-    	background-size: cover;
+	margin-top:20%;
+	margin-left:17%;
+	height:700px;
+	width:890px;
 }
 #sleft
 {

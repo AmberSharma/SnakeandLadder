@@ -48,29 +48,26 @@ text-decoration:none;
 }
 table
 {
-margin-top:10px;
-margin-left:60%;
+margin-top:11%;
+margin-left:65%;
 width:500px;
-height:115px;
+height:180px;
 }
 #container
 {
 	border:1px solid green;
-	background-image:url(../images/sandllogo.jpg);
+	background-image:url('../images/sandllogo.jpg');
 	background-repeat:no-repeat;
 	background-color: transparent;
+	background-size: 890px 700px;
   	box-shadow: 40px 40px 100px 40px #000;
-	margin-top:10%;
-	margin-left:25%;
-	height:475px;
-	width:670px;
-	-webkit-background-size: cover;
-    	-moz-background-size: cover;
-    	-o-background-size: cover;
-    	background-size: cover;
+	margin-top:20%;
+	margin-left:17%;
+	height:700px;
+	width:890px;
 }
 html { 
-    background: url(<?php echo SITE_URL .'/images/backgroundimage.jpg' ?>) no-repeat center center fixed #000; 
+    background: url('../images/backgroundimage.jpg') no-repeat center center fixed #000; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;

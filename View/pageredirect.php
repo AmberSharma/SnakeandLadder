@@ -1,5 +1,7 @@
-<?php require_once "/var/www/SnakeandLadder/trunk/libraries/constant.php"; ?>
-<?php if($_REQUEST['valid'] == 0)
+<?php require_once "/var/www/SnakeandLadder/trunk/libraries/constant.php";
+
+?>
+<?php if($_REQUEST['valid'] != 1 || empty($_REQUEST['valid']))
 {
 	header("Location: bendrules.php");
 }
@@ -9,7 +11,7 @@
 $(document).ready(function()
 {
 	<?php 
-		if(!empty($_REQUEST['name']) && !empty($_REQUEST['turn']) && !empty($_REQUEST['method'])) 
+		if(!empty($_REQUEST['name']) && !empty($_REQUEST['turn']) && !empty($_REQUEST['method']) && !empty($_REQUEST['opponent']) && !empty($_REQUEST['dice'])) 
 		{
 			if($_REQUEST['method'] == "Automatic")
 			{
@@ -24,6 +26,10 @@ $(document).ready(function()
 	<?php
 				
 			}
+		}
+		else
+		{
+			header("Location: bendrules.php");
 		}
 	?>
 });

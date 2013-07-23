@@ -158,7 +158,7 @@ function deleteuser()
 						</div>
 					</div>
 					
-				<input type="hidden" name="avatar" id="avatar"></input>
+				<input type="hidden" name="avatar" id="avatar" value='1'></input>
 				<input type="hidden" name="valid" id="valid"></input>
 					<input type="submit" value="ok start"></input>
 				
