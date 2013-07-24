@@ -3,9 +3,7 @@
 <link rel="stylesheet" href="<?php echo SITE_URL; ?>/css/bendrules.css">
 <html>
 <head>
-<style>
 
-</style>
 <script>
 $(document).ready(function() {
 
@@ -158,8 +156,8 @@ function deleteuser()
 						</div>
 					</div>
 					
-				<input type="hidden" name="avatar" id="avatar" value='1'></input>
-				<input type="hidden" name="valid" id="valid"></input>
+				<input type="hidden" name="avatar" id="avatar" ></input>
+				<input type="hidden" name="valid" id="valid" value="1"></input>
 					<input type="submit" value="ok start"></input>
 				
 		</div>

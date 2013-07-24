@@ -22,6 +22,7 @@ var message6 = "Sorry!!! It total is Over hundred!!!";
 var message7 = "Hurray!!! You Have Won!!!";
 var message8 = "Sorry!!! You Have Lost!!!";
 var message9 = "Hard Luck!!! The Sum is Over 100!!!";
+var message10 = "Hurray!!! You Have Won!!! for Other Player Have left the game";
 var pos = 0;
 var firstturn = 0;
 var printed = 0;
@@ -150,6 +151,13 @@ function getChance()
 			{
 				
 				var resp=jQuery.parseJSON($.trim(data));
+				if(resp == null)
+				{
+					if (confirm(message10)) 
+					{
+						window.location.href="bendrules.php?name="+user;
+					}
+				}
 				if(resp == user)
 				{
 					$("#die1").show();

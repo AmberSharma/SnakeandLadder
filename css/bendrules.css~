@@ -8,6 +8,7 @@ font-weight: 700;
 }
 table td
 {
+border:1px solid red;
 color:#FFFFFF;
 font-size:11px;
 font-family: "Courier New", Courier, mono;
@@ -63,11 +64,7 @@ height:50px;
 
 #container
 {
-	background-image:url('../images/bg.jpg');
-	background-repeat:no-repeat;
-	background-color: transparent;
-	background-size: 890px 700px;
-  	box-shadow: 40px 40px 100px 40px #000;
+	
 	margin-top:20%;
 	margin-left:17%;
 	height:700px;
@@ -84,11 +81,9 @@ height:50px;
 	color:yellow;
 }
 html { 
-    background: url(../images/backgroundimage.jpg) no-repeat center center fixed #000; 
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
+    background: url(../images/newbackground.jpg) no-repeat; 
+    background-size: 100% 100%;
+    
 }
 center
 {

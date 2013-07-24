@@ -11,11 +11,11 @@
 </head>
 <body>
 <div id="container">
-<div style="width:10%"><a href="<?php echo SITE_URL ?>/View/bendrules.php" style="margin-left:20%;"><img src="images/bendrules.jpg" height='150' width='50'/></a></div>
+<div style="width:10%"><a href="<?php echo SITE_URL ?>/View/bendrules.php" style="margin-left:40%;"><img src="images/bendrules.jpg" height='150' width='50'/></a></div>
 <table cellspacing="0">
 <tr>
 <td>
-<a href="<?php echo SITE_URL ?>/View/bendrules.php"><img src="images/startgame.jpg" height='60' width='220'/></a>
+<a href="<?php echo SITE_URL ?>/View/bendrules.php" ><img src="images/startgame.jpg" height='60' width='220'/></a>
 </td>
 
 </tr>

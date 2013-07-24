@@ -1,10 +1,24 @@
 <html>
 <head>
+<?php
+session_start();
+if($_SESSION['hasbeenhere'] == 1)
+{
+	unset($_SESSION['hasbeenhere']);
+	header("Location: http://www.snakeandladder.com/View/bendrules.php?name=".$_REQUEST['name']);
+}
+else
+{
+   $_SESSION['hasbeenhere'] = 1;
+}
+?>
 <title>Snake and ladder</title>
 <?php require_once "/var/www/SnakeandLadder/trunk/libraries/constant.php"; ?>
 <script src="<?php echo SITE_URL;?>/js/jquery.tools.min.js"></script>
 <script src="<?php echo SITE_URL;?>/js/automaticfunctions.js"></script>
 <link rel="stylesheet" href="<?php echo SITE_URL; ?>/css/automatic.css">
+
+
 <script>
 
 $(document).ready(function()
